@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout-v21\\notification_template_icon_group.xml"
+    }
+]

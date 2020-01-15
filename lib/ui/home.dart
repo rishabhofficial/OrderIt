@@ -1,0 +1,140 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:startup_namer/model.dart';
+import './company.dart';
+import './sentProduct.dart';
+import './product.dart';
+
+class Home extends StatelessWidget {
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+      bottomNavigationBar: new BottomAppBar(
+        color: Color.fromRGBO(58, 66, 86, 1.0),
+        shape: CircularNotchedRectangle(),
+        child: new Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.sort),
+          color: Colors.white,
+          onPressed: () {
+            
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.person),
+          color: Colors.white,
+          onPressed: () {},
+        ),
+      ],
+    ),  
+      ),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              elevation: 0.1,
+              backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+              expandedHeight: 200.0,
+              floating: true,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: Text("Order History",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22.0,
+                      )),
+                  background: Image.network(
+                    "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=350",
+                    fit: BoxFit.cover,
+                  )),
+            ),
+          ];
+        },
+        body: Container(
+        child:StreamBuilder(
+        stream: Firestore.instance.collection("Orders").orderBy('timestamp', descending: true).snapshots(),
+      builder: (context, snapshot){
+        if (!snapshot.hasData){
+                return Center(
+                      child: CircularProgressIndicator(),
+                    );
+              
+        }
+        else {
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot prodList=snapshot.data.documents[index];
+              return Column(
+               children: <Widget>[
+              Card(
+      elevation: 8.0,
+      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      child: Container(
+        decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
+        child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        leading: Container(
+          padding: EdgeInsets.only(right: 12.0, top: 10),
+          decoration: new BoxDecoration(
+              border: new Border(
+                  right: new BorderSide(width: 1.0, color: Colors.white24))),
+          child: prodList['isSent']?Icon(Icons.check, color: Colors.green, size: 35,):Icon(Icons.clear, color: Colors.red, size: 35),
+        ),
+         title: Text('${prodList['compName']}',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+        subtitle: Row(
+          children: <Widget>[
+            Icon(Icons.date_range, color: Colors.yellow[200]),
+            Text('${prodList['date']}', style: TextStyle(color: Colors.white))
+          ],
+        ),
+        trailing:
+            IconButton(icon: Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),onPressed: (){
+              CompanyData data = CompanyData(email: prodList['compEmail'], name: prodList['compName']);
+              prodList['isSent']?Navigator.push(context, MaterialPageRoute(builder: (context) => SentItemsPage(prodList.documentID, prodList['compName']))):Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(data: data, docID: prodList.documentID, check: true,)));},),
+             ) ,
+      ),
+    )]);
+                
+          },
+        );
+      }
+    },
+  ),
+        )      
+        ),
+      
+      floatingActionButton: new FloatingActionButton(
+          backgroundColor: Colors.black,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                  MaterialPageRoute(builder: (context) => CompanyPage()),
+  );
+}
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+    );
+  }
+}
+
+
+

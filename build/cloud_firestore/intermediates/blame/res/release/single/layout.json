@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_part_time.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media_narrow_custom.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_template_big_media_narrow_custom.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_media_custom.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_template_media_custom.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_lines_media.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_template_lines_media.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_part_chronometer.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout\\notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media_custom.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_template_big_media_custom.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_action.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout\\notification_action.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media_narrow.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_media_action.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_media_action.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_media.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\layout\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_template_big_media.xml"
+    },
+    {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\cloud_firestore\\intermediates\\res\\merged\\release\\layout\\notification_media_cancel_action.xml",
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0.aar\\53285f4b004bcb45569af6d385fa3e30\\res\\layout\\notification_media_cancel_action.xml"
+    }
+]
