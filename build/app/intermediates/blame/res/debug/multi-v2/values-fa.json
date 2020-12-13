@@ -4,7 +4,7 @@
             "outputFile": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-fa\\values-fa.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\jetified-play-services-basement-16.2.0.aar\\3f38e2eb08c2240c110009b16181f450\\res\\values-fa\\values.xml",
+                    "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\jetified-play-services-basement-17.0.0.aar\\2f942254930d3aa1333c6eecc5f309fc\\res\\values-fa\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\jetified-play-services-base-16.0.1.aar\\f9ada8022d7876926b0ca3d747c09e79\\res\\values-fa\\values.xml",
+                    "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-17.0.0.aar\\67f1c227dfed599aa918c9f45d49ecc1\\res\\values-fa\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\bf9c0689cae3c97cb7a99827599e7745\\res\\values-fa\\values-fa.xml",
+                    "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\values-fa\\values-fa.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

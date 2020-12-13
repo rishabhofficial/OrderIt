@@ -1,0 +1,72 @@
+name: startup_namer
+description: A new Flutter project.
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning aterence/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.2.0 <3.0.0"
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+    
+  
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+  cloud_firestore: ^0.13.6
+  firebase_core: ^0.4.0+1
+  mailer: ^3.0.2
+  card_settings: ^1.4.1
+  html: ^0.14.0+3
+  excel: ^1.0.9
+  path_provider: ^1.6.10
+  permission_handler: ^5.0.1
+  flutter_boom_menu: ^1.0.2
+  pdf: ^1.9.0
+  open_file: ^3.0.1
+  datetime_picker_formfield: ^1.0.0
+  intl: ^0.16.1
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # flutter_launcher_icons: "^0.6.1"
+
+flutter_icons:
+  image_path: "icon/icon.png" 
+  android: true
+  ios: true
+flutter:
+  fonts:
+     - family:  MyFlutterApp
+       fonts:
+        - asset: asset/MyFlutterApp.ttf
+  assets:
+    - asset/
+  uses-material-design: true

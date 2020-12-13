@@ -3,7 +3,10 @@ package io.flutter.plugins;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.firebase.cloudfirestore.CloudFirestorePlugin;
 import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
-import com.github.adee42.keyboardvisibility.KeyboardVisibilityPlugin;
+import com.example.flutter_boom_menu.FlutterBoomMenuPlugin;
+import com.crazecoder.openfile.OpenFilePlugin;
+import io.flutter.plugins.pathprovider.PathProviderPlugin;
+import com.baseflow.permissionhandler.PermissionHandlerPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -15,7 +18,10 @@ public final class GeneratedPluginRegistrant {
     }
     CloudFirestorePlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebase.cloudfirestore.CloudFirestorePlugin"));
     FirebaseCorePlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebase.core.FirebaseCorePlugin"));
-    KeyboardVisibilityPlugin.registerWith(registry.registrarFor("com.github.adee42.keyboardvisibility.KeyboardVisibilityPlugin"));
+    FlutterBoomMenuPlugin.registerWith(registry.registrarFor("com.example.flutter_boom_menu.FlutterBoomMenuPlugin"));
+    OpenFilePlugin.registerWith(registry.registrarFor("com.crazecoder.openfile.OpenFilePlugin"));
+    PathProviderPlugin.registerWith(registry.registrarFor("io.flutter.plugins.pathprovider.PathProviderPlugin"));
+    PermissionHandlerPlugin.registerWith(registry.registrarFor("com.baseflow.permissionhandler.PermissionHandlerPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

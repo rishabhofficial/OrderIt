@@ -1,7 +1,4 @@
-#Wed Nov 27 19:14:23 IST 2019
-base.0=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\dexMerger\\release\\0
-path.1=classes2.dex
-renamed.1=classes2.dex
+#Fri Jul 03 22:16:27 IST 2020
+base.0=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\r8\\release\\0
 path.0=classes.dex
 renamed.0=classes.dex
-base.1=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\dexMerger\\release\\0

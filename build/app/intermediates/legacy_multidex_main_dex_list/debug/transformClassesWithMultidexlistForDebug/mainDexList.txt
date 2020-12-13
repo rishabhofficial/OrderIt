@@ -1,3 +1,5 @@
+android/annotation/SuppressLint.class
+android/annotation/TargetApi.class
 android/support/v4/media/MediaBrowserCompat$MediaItem$Flags.class
 android/support/v4/media/MediaMetadataCompat$BitmapKey.class
 android/support/v4/media/MediaMetadataCompat$LongKey.class
@@ -25,6 +27,7 @@ androidx/annotation/CheckResult.class
 androidx/annotation/ColorInt.class
 androidx/annotation/ColorLong.class
 androidx/annotation/ColorRes.class
+androidx/annotation/ContentView.class
 androidx/annotation/DimenRes.class
 androidx/annotation/Dimension.class
 androidx/annotation/DrawableRes.class
@@ -34,6 +37,10 @@ androidx/annotation/FractionRes.class
 androidx/annotation/GuardedBy.class
 androidx/annotation/HalfFloat.class
 androidx/annotation/IdRes.class
+androidx/annotation/InspectableProperty$EnumEntry.class
+androidx/annotation/InspectableProperty$FlagEntry.class
+androidx/annotation/InspectableProperty$ValueType.class
+androidx/annotation/InspectableProperty.class
 androidx/annotation/IntDef.class
 androidx/annotation/IntRange.class
 androidx/annotation/IntegerRes.class
@@ -76,6 +83,7 @@ androidx/core/app/NotificationCompat$BadgeIconType.class
 androidx/core/app/NotificationCompat$GroupAlertBehavior.class
 androidx/core/app/NotificationCompat$NotificationVisibility.class
 androidx/core/app/NotificationCompat$StreamType.class
+androidx/core/app/RemoteInput$Source.class
 androidx/core/app/ServiceCompat$StopForegroundFlags.class
 androidx/core/content/PermissionChecker$PermissionResult.class
 androidx/core/content/pm/PermissionInfoCompat$Protection.class
@@ -116,6 +124,9 @@ androidx/versionedparcelable/NonParcelField.class
 androidx/versionedparcelable/ParcelField.class
 androidx/versionedparcelable/VersionedParcelize.class
 androidx/viewpager/widget/ViewPager$DecorView.class
+com/baseflow/permissionhandler/PermissionConstants$PermissionGroup.class
+com/baseflow/permissionhandler/PermissionConstants$PermissionStatus.class
+com/baseflow/permissionhandler/PermissionConstants$ServiceStatus.class
 com/google/android/gms/common/GoogleSignatureVerifier.class
 com/google/android/gms/common/SignInButton$ButtonSize.class
 com/google/android/gms/common/SignInButton$ColorScheme.class
@@ -137,7 +148,6 @@ com/google/android/gms/common/util/RetainForClient.class
 com/google/android/gms/common/util/VisibleForTesting.class
 com/google/android/gms/common/zzc.class
 com/google/android/gms/common/zzm.class
-com/google/android/gms/stats/CodePackage.class
 com/google/auto/value/AutoAnnotation.class
 com/google/auto/value/AutoOneOf.class
 com/google/auto/value/AutoValue$Builder.class
@@ -157,7 +167,6 @@ com/google/errorprone/annotations/CheckReturnValue.class
 com/google/errorprone/annotations/CompatibleWith.class
 com/google/errorprone/annotations/CompileTimeConstant.class
 com/google/errorprone/annotations/DoNotCall.class
-com/google/errorprone/annotations/DoNotMock.class
 com/google/errorprone/annotations/ForOverride.class
 com/google/errorprone/annotations/FormatMethod.class
 com/google/errorprone/annotations/FormatString.class
@@ -175,6 +184,7 @@ com/google/errorprone/annotations/concurrent/LazyInit.class
 com/google/errorprone/annotations/concurrent/LockMethod.class
 com/google/errorprone/annotations/concurrent/UnlockMethod.class
 com/google/firebase/annotations/PublicApi.class
+com/google/firebase/firestore/DocumentId.class
 com/google/firebase/firestore/Exclude.class
 com/google/firebase/firestore/IgnoreExtraProperties.class
 com/google/firebase/firestore/PropertyName.class
@@ -204,7 +214,6 @@ com/google/protobuf/ExperimentalApi.class
 io/flutter/app/FlutterApplication.class
 io/flutter/view/FlutterMain.class
 io/grpc/CallOptions.class
-io/grpc/ClientInterceptor.class
 io/grpc/EquivalentAddressGroup$Attr.class
 io/grpc/ExperimentalApi.class
 io/grpc/Grpc$TransportAttr.class
@@ -217,6 +226,7 @@ io/grpc/MethodDescriptor$Builder.class
 io/grpc/MethodDescriptor$MethodType.class
 io/grpc/MethodDescriptor.class
 io/grpc/NameResolver$ResolutionResultAttr.class
+io/grpc/Status.class
 io/grpc/inprocess/InProcessTransport.class
 io/grpc/internal/ClientStream.class
 io/grpc/internal/ClientTransport.class
@@ -229,15 +239,19 @@ io/grpc/internal/RetriableStream$State.class
 io/grpc/internal/RetriableStream.class
 io/grpc/internal/RetryPolicy.class
 io/grpc/internal/ServerTransport.class
-io/grpc/internal/ServiceConfigInterceptor.class
 io/grpc/internal/Stream.class
+io/grpc/internal/TransportFrameUtil.class
+io/grpc/okhttp/Utils.class
+io/grpc/perfmark/PerfMarker.class
+io/grpc/perfmark/package-info.class
 io/grpc/stub/AbstractStub.class
 io/grpc/stub/annotations/RpcMethod.class
-io/grpc/util/RoundRobinLoadBalancerFactory$EmptyPicker.class
-io/grpc/util/RoundRobinLoadBalancerFactory$RoundRobinLoadBalancer$StickinessState.class
-io/grpc/util/RoundRobinLoadBalancerFactory$RoundRobinPicker.class
+io/grpc/util/RoundRobinLoadBalancer$EmptyPicker.class
+io/grpc/util/RoundRobinLoadBalancer$RoundRobinPicker.class
+io/grpc/util/RoundRobinLoadBalancer$StickinessState.class
 io/opencensus/common/ExperimentalApi.class
 io/opencensus/common/Internal.class
+io/opencensus/internal/DefaultVisibilityForTesting.class
 javax/annotation/CheckForNull.class
 javax/annotation/CheckForSigned.class
 javax/annotation/CheckReturnValue.class

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/model.dart';
 import 'package:mailer/mailer.dart';
@@ -8,6 +7,12 @@ import 'package:mailer/smtp_server.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:card_settings/card_settings.dart';
 import './form.dart';
+import 'dart:io';
+import 'package:excel/excel.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 bool progress;
 
@@ -207,6 +212,65 @@ void mailing() async {
     }
   }
 }
+
+  static const androidMethodChannel = const MethodChannel('team.native.io/openGmail');
+
+
+  void excelBuild() async {
+    
+    ByteData data = await rootBundle.load("asset/MANKIND-MAIN.xlsx");
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var decoder = new Excel.decodeBytes(bytes);
+
+    decoder.updateCell('MANKIND', CellIndex.indexByString("A4"), "Date:- " + DateTime.now().day.toString() + "-" + DateTime.now().month.toString() +"-"+DateTime.now().year.toString());
+for (var table in decoder.tables.keys) {
+    int i=0;
+    for (var row in decoder.tables[table].rows) {
+     i++;
+     if(i>=8){
+       
+        decoder.updateCell('MANKIND', CellIndex.indexByString("C" + i.toString()), "");
+     }
+    }
+
+   }
+
+  selectedProductList.forEach((key, value) {
+    for (var table in decoder.tables.keys) {
+    int i=0;
+    for (var row in decoder.tables[table].rows) {
+     i++;
+     if(row[0] == key){
+       
+        decoder.updateCell('MANKIND', CellIndex.indexByString("C" + i.toString()), value.qty , cellStyle: CellStyle(horizontalAlign: HorizontalAlign.Center));
+        break;
+     }
+    }
+
+   }});
+
+   String directoryExt;
+    new Directory('/storage/emulated/0/MyFile').create()
+    // The created directory is returned as a Future.
+        .then((Directory directory) {
+      print(directory.path);
+      directoryExt = directory.path;
+    });
+
+  Map<Permission, PermissionStatus> permissions = await [Permission.storage].request();
+  if (await Permission.storage.isGranted) {
+
+ decoder.encode().then((onValue) {
+        File(directoryExt + "/" + "mankind.xlsx")
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(onValue);
+    });
+    bool check = await File(directoryExt + "/" + "mankind.xlsx").exists();
+    print("Check iss ===============>>>>>" + check.toString());
+  }
+ 
+    await androidMethodChannel.invokeMethod('openGmail',{'filePath':directoryExt + "/" + "mankind.xlsx", 'subject':"Hii My name is Rishabh" , 'mailId': "rishabhag.official@gmail.com"});
+  }
  
  void addToMap(ProductData prod) {
     setState((){
@@ -430,7 +494,7 @@ void mailing() async {
                                 ),
                                 onPressed: (){
                                   Navigator.of(context, rootNavigator: true).pop();
-                                  ProductData dataa = ProductData(name: rev[index]['prodName'], pack: rev[index]['prodPack']);
+                                  ProductData dataa = ProductData(name: rev[index]['prodName'], pack: rev[index]['prodPack'], division: rev[index]['prodDivision']);
                                   //Navigator.of(context).pop();
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProductUpdateForm(dataa,rev[index].documentID,widget.data.name)));
                                 },
@@ -523,9 +587,8 @@ void mailing() async {
                                               border: new OutlineInputBorder(
                                                 borderRadius: new BorderRadius.circular(15.0), 
                                                 borderSide: new BorderSide(),
-                                ),
-                                ),
-                            
+                                              ),
+                                              ),                            
                                               onSubmitted: (text) {
                                                 if (_textFieldController.text == ""){
                                                   setState(() {
@@ -627,6 +690,8 @@ void mailing() async {
 
           floatingActionButton: FloatingActionButton(
             onPressed: () {
+               if(widget.data.name == "MANKIND-MAIN"){excelBuild();}
+               else{
               TextEditingController _email = TextEditingController(text: widget.data.email);
               TextEditingController _cc = TextEditingController(text: widget.data.cc);
               TextEditingController _subject = TextEditingController(text: widget.subjectBody);
@@ -687,19 +752,20 @@ void mailing() async {
               label: "Send Now",
               onPressed: () async {
                 Navigator.pop(context);
-                if(widget.check == true){
-                  final db = Firestore.instance;
-                  await db.collection('Orders').document(widget.docID).delete();
-                }
-               setState(() {
-                widget.receiver = _email.text;
-                widget.test = _cc.text;
-                widget.subjectBody = _subject.text;
-                widget.emailBody = _message.text;
-               });
-               
-
-                progress =false;
+                try {
+                  final result = await InternetAddress.lookup('google.com');
+                  if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                    if(widget.check == true){
+                      final db = Firestore.instance;
+                      await db.collection('Orders').document(widget.docID).delete();
+                    }
+                    setState(() {
+                      widget.receiver = _email.text;
+                      widget.test = _cc.text;
+                      widget.subjectBody = _subject.text;
+                      widget.emailBody = _message.text;
+                    });
+                    progress =false;
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -723,13 +789,18 @@ void mailing() async {
                     );
                   },
                 );
-  
-
+               
                 mailing();
                 new Future.delayed(new Duration(seconds: 10), () {
                   Navigator.pop(context);
                   _displaySnackBar(action);
                 });
+  }
+} on SocketException catch (_) {
+   final snackbar = SnackBar(content: Text("Please check your internet connection"));
+     _sKey.currentState.showSnackBar(snackbar);
+}
+                
                 
               },
             ),
@@ -750,7 +821,7 @@ void mailing() async {
        ),]
        ),)     
        ));
-            },
+            }},
             child: Icon(Icons.mail),
             backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
           ),

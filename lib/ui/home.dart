@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/model.dart';
-import './company.dart';
+import './party.dart';
 import './sentProduct.dart';
 import './product.dart';
+import './company.dart';
+import 'dart:io';
+
 
 class Home extends StatelessWidget {
 
@@ -22,8 +26,12 @@ class Home extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.sort),
           color: Colors.white,
-          onPressed: () {
-            
+          onPressed: ()  {
+            // Directory appDocDirectory = await getApplicationDocumentsDirectory();
+            // bool check = await File(appDocDirectory.path + "/" + "mankind.xlsx").exists();
+            // print("Check iss ===============>>>>>" + check.toString());
+            // Test test = new Test();
+            // test.sptest;
           },
         ),
         IconButton(
@@ -123,11 +131,48 @@ class Home extends StatelessWidget {
                 Icons.add,
                 color: Colors.white,
               ),
+              elevation: 2.0,
               onPressed: () {
-                  Navigator.push(
+                  
+  const TextStyle _actionSheetTextStyle = TextStyle(
+    color: Color.fromRGBO(34, 34, 34, 1.0),
+    fontSize: 16,
+  );
+ final CupertinoActionSheet actionSheet = CupertinoActionSheet(
+   actions: <Widget>[
+     CupertinoActionSheetAction(
+       child: Text("Expiry Console", style: _actionSheetTextStyle),
+       onPressed: (){
+         Navigator.of(context).pop();
+          Navigator.push(
+                    context,
+                  MaterialPageRoute(builder: (context) => PartyPage()),
+ );
+     },),
+     CupertinoActionSheetAction(
+       child: Text("Order Console", style: _actionSheetTextStyle),
+       onPressed: (){
+          Navigator.of(context).pop();
+          Navigator.push(
                     context,
                   MaterialPageRoute(builder: (context) => CompanyPage()),
-  );
+ );
+     },)
+   ],
+   cancelButton: CupertinoActionSheetAction(
+        child: Text(
+          "Cancel",
+          style: _actionSheetTextStyle,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+ );
+ showCupertinoModalPopup<CupertinoActionSheet>(
+      context: context,
+      builder: (BuildContext context) => actionSheet,
+    );
 }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
