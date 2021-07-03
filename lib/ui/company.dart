@@ -7,6 +7,12 @@ import './form.dart';
 
 List<String> compName = [];
 var check = new Map();
+var email = new Map();
+
+class Mails{
+  String mailId;
+  String cc;
+}
 
 class CompanyPage extends StatefulWidget {
   @override
@@ -71,6 +77,10 @@ class _CompanyPageState extends State<CompanyPage>  {
               if (!check.containsKey(companyList['compName'])) {
                 check[companyList['compName']] = true;
                 compName.add(companyList['compName']);
+                Mails mail = Mails();
+                mail.mailId = companyList['compEmail'];
+                mail.cc = companyList['compCC'];
+                email[companyList['compName']] = mail;
               }
                 return Column(
                   children: <Widget>[
@@ -80,7 +90,7 @@ class _CompanyPageState extends State<CompanyPage>  {
                   onLongPress: (){
                     return showDialog(
                       context: context,
-                      child: SimpleDialog(
+                      builder: (BuildContext context) => SimpleDialog(
                         title: Text('${companyList['compName']}', textAlign: TextAlign.center ,
                                 style: TextStyle(
                                   fontSize: 25
@@ -166,6 +176,10 @@ class DataSearch extends SearchDelegate<String> {
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.details),
         title: Text(suggestionList[index]),
+        //  onTap: () {
+        //        final data = CompanyData(email: email[suggestionList[index]].mailId, name: suggestionList[index], cc: email[suggestionList[index]].cc);
+        //        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(data: data, check: false)));
+        //      },
         ),
         itemCount: suggestionList.length,
     );

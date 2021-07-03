@@ -2,13 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/ui/partyReport.dart';
 import 'package:startup_namer/ui/transactionList.dart';
-import './allProduct.dart';
+import './allProdSearch.dart';
 import 'package:startup_namer/model.dart';
 import './form.dart';
 
 
 List<String> partyName = [];
 var check = new Map();
+var disc = new Map();
 
 class PartyPage extends StatefulWidget {
   @override
@@ -75,16 +76,17 @@ class _PartyPageState extends State<PartyPage>  {
               if (!check.containsKey(partyList['partyName'])) {
                 check[partyList['partyName']] = true;
                 partyName.add(partyList['partyName']);
+                disc[partyList['partyName']] = partyList['partyDefaultDiscount'];
               }
                 return Column(
                   children: <Widget>[
                     ListTile(title: Text('${partyList['partyName']}', style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 19,
                   ),),
                   onLongPress: (){
                     return showDialog(
                       context: context,
-                      child: SimpleDialog(
+                      builder: (BuildContext context) => SimpleDialog(
                         title: Text('${partyList['partyName']}', textAlign: TextAlign.center ,
                                 style: TextStyle(
                                   fontSize: 25
@@ -137,12 +139,12 @@ class _PartyPageState extends State<PartyPage>  {
   floatingActionButton: new FloatingActionButton(
           backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
               child: const Icon(
-                Icons.archive,
+                Icons.search,
                 color: Colors.white,
               ),
               elevation: 2.0,
               onPressed: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (context) => PartyReport()));
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => SearchProdList()));
               })
 );
 }
@@ -172,16 +174,46 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(Icons.warning_rounded, color: Colors.red, size: 100),
+            GestureDetector(
+              onTap: () {
+                //Define your action when clicking on result item.
+                //In this example, it simply closes the page
+                this.close(context, this.query);
+              },
+              child: Text(
+                "Work In Progress",
+                style: Theme.of(context)
+                    .textTheme
+                    .display2
+                    .copyWith(fontWeight: FontWeight.normal),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty?partyName:partyName.where((p) => p.startsWith(query)).toList();
+    final suggestionList = query.isEmpty?partyName:partyName.where((p) => p.startsWith(query.toUpperCase())).toList();
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.details),
         title: Text(suggestionList[index]),
+        onTap: (){
+          this.close(context, this.query);
+          PartyData data = PartyData(name: suggestionList[index], defaultDiscount: disc[suggestionList[index]]);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ExpiryList(data)));
+                
+        },
         ),
         itemCount: suggestionList.length,
     );

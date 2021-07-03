@@ -1,4 +1,4 @@
-#Sun Dec 13 11:25:46 IST 2020
+#Tue Jun 08 12:51:10 IST 2021
 base.2=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
 path.2=classes3.dex
 base.1=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0

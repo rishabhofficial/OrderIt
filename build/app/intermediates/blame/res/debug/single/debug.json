@@ -17,7 +17,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout-v21_notification_action.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout-v21\\notification_action.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout-v21\\notification_action.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_launch_background.xml.flat",
@@ -33,11 +33,11 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-xhdpi-v4\\notify_panel_notification_icon_bg.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-xhdpi-v4\\notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_notification_bg.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable\\notification_bg.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable\\notification_bg.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_common_google_signin_btn_text_dark_normal_background.9.png.flat",
@@ -45,7 +45,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-xhdpi-v4\\notification_bg_low_pressed.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-xhdpi-v4\\notification_bg_low_pressed.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_common_google_signin_btn_text_dark_normal_background.9.png.flat",
@@ -77,7 +77,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
@@ -101,7 +101,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_action.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout\\notification_action.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout\\notification_action.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_common_google_signin_btn_text_light.xml.flat",
@@ -113,7 +113,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_notification_tile_bg.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable\\notification_tile_bg.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable\\notification_tile_bg.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_common_google_signin_btn_icon_light.xml.flat",
@@ -145,7 +145,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_template_icon_group.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout\\notification_template_icon_group.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout\\notification_template_icon_group.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_template_lines_media.xml.flat",
@@ -153,7 +153,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout-v21_notification_template_icon_group.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout-v21\\notification_template_icon_group.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout-v21\\notification_template_icon_group.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_common_google_signin_btn_icon_light_normal_background.9.png.flat",
@@ -161,7 +161,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout-v21_notification_template_custom_big.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout-v21\\notification_template_custom_big.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout-v21\\notification_template_custom_big.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
@@ -197,7 +197,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-mdpi-v4\\notify_panel_notification_icon_bg.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-mdpi-v4\\notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
@@ -205,19 +205,19 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-hdpi-v4\\notification_bg_normal_pressed.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-hdpi-v4\\notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout-v16_notification_template_custom_big.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout-v16\\notification_template_custom_big.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout-v16\\notification_template_custom_big.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_template_part_chronometer.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout\\notification_template_part_chronometer.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout\\notification_template_part_chronometer.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-xhdpi-v4\\notification_bg_low_normal.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-xhdpi-v4\\notification_bg_low_normal.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_text_dark_normal_background.9.png.flat",
@@ -233,19 +233,19 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-xhdpi-v4\\notification_bg_normal.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-xhdpi-v4\\notification_bg_normal.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_notification_bg_low.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable\\notification_bg_low.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable\\notification_bg_low.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout-v21_notification_action_tombstone.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout-v21\\notification_action_tombstone.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout-v21\\notification_action_tombstone.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-hdpi-v4\\notify_panel_notification_icon_bg.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-hdpi-v4\\notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_text_light_normal_background.9.png.flat",
@@ -265,7 +265,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-xhdpi-v4\\notification_bg_normal_pressed.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-xhdpi-v4\\notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_common_google_signin_btn_icon_light_normal_background.9.png.flat",
@@ -281,7 +281,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-v21_notification_action_background.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-v21\\notification_action_background.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-v21\\notification_action_background.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_common_google_signin_btn_icon_light_focused.xml.flat",
@@ -289,7 +289,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-hdpi-v4\\notification_bg_normal.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-hdpi-v4\\notification_bg_normal.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_common_google_signin_btn_text_dark_normal_background.9.png.flat",
@@ -305,7 +305,7 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_template_part_time.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout\\notification_template_part_time.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout\\notification_template_part_time.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_googleg_standard_color_18.png.flat",
@@ -317,15 +317,15 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-hdpi-v4\\notification_bg_low_normal.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-hdpi-v4\\notification_bg_low_normal.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout_custom_dialog.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout\\custom_dialog.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout\\custom_dialog.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-mdpi-v4\\notification_bg_low_normal.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-mdpi-v4\\notification_bg_low_normal.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
@@ -341,26 +341,30 @@
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-hdpi-v4\\notification_bg_low_pressed.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-hdpi-v4\\notification_bg_low_pressed.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-mdpi-v4\\notification_bg_normal_pressed.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-mdpi-v4\\notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable_notification_icon_background.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable\\notification_icon_background.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable\\notification_icon_background.xml"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\drawable-mdpi-v4\\notification_bg_normal.9.png"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\drawable-mdpi-v4\\notification_bg_normal.9.png"
     },
     {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
         "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-17.0.0.aar\\67f1c227dfed599aa918c9f45d49ecc1\\res\\drawable-hdpi-v4\\common_google_signin_btn_icon_dark_normal_background.9.png"
     },
     {
+        "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\drawable-v21_launch_background.xml.flat",
+        "source": "D:\\flutter_projects\\startup_namer\\android\\app\\src\\main\\res\\drawable-v21\\launch_background.xml"
+    },
+    {
         "merged": "D:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_action_tombstone.xml.flat",
-        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\689b967fe3bbbf1073aecc3eba521edc\\res\\layout\\notification_action_tombstone.xml"
+        "source": "C:\\Users\\rishabagrawal\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.5.0-beta01.aar\\9360952785cb6568d6eb2b0de2e089c4\\res\\layout\\notification_action_tombstone.xml"
     }
 ]

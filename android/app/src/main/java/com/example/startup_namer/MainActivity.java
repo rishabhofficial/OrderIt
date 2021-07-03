@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.os.StrictMode;
 
 import java.io.File;
-import io.flutter.app.FlutterActivity;
+import androidx.annotation.NonNull;
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
+
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -15,23 +18,16 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 
+
 public class MainActivity extends FlutterActivity  {
   private static final String CHANNEL = "team.native.io/openGmail";
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    StrictMode.VmPolicy.Builder builder = null;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-      builder = new StrictMode.VmPolicy.Builder();
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-      StrictMode.setVmPolicy(builder.build());
-    }
-    super.onCreate(savedInstanceState);
-    GeneratedPluginRegistrant.registerWith(this);
-    new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
-            new MethodCallHandler() {
-              @Override
-              public void onMethodCall(MethodCall call, Result result) {
+  public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+    GeneratedPluginRegistrant.registerWith(flutterEngine);
+    new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
+               .setMethodCallHandler(
+                  (call, result) -> {
+              
                 if (call.method.equals("openGmail")) {
                     String fileUri =call.argument("filePath").toString();
                     String subject =call.argument("subject").toString();
@@ -49,10 +45,9 @@ public class MainActivity extends FlutterActivity  {
                 }
                 else {
                     result.notImplemented();
-                }}
-
-    
-  }); }
+                }
+              });
+       }
   private void sendMail(Uri filePath, String subject, String mailId){
     Intent intent = new Intent(Intent.ACTION_SEND);
     intent.setType("text/plain");

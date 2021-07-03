@@ -6,6 +6,8 @@ import './party.dart';
 import './sentProduct.dart';
 import './product.dart';
 import './company.dart';
+import './partyReport.dart';
+import './profile.dart';
 import 'dart:io';
 
 
@@ -37,7 +39,9 @@ class Home extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.person),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileForm()));
+          },
         ),
       ],
     ),  
@@ -48,7 +52,7 @@ class Home extends StatelessWidget {
             SliverAppBar(
               elevation: 0.1,
               backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-              expandedHeight: 200.0,
+              expandedHeight: 230.0,
               floating: true,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
@@ -85,7 +89,8 @@ class Home extends StatelessWidget {
               return Column(
                children: <Widget>[
               Card(
-      elevation: 8.0,
+      elevation: 100.0,
+      shadowColor: Colors.black,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
         decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
@@ -140,6 +145,15 @@ class Home extends StatelessWidget {
   );
  final CupertinoActionSheet actionSheet = CupertinoActionSheet(
    actions: <Widget>[
+     CupertinoActionSheetAction(
+       child: Text("Generate Report", style: _actionSheetTextStyle),
+       onPressed: (){
+         Navigator.of(context).pop();
+          Navigator.push(
+                    context,
+                  MaterialPageRoute(builder: (context) => PartyReport()),
+ );
+     },),
      CupertinoActionSheetAction(
        child: Text("Expiry Console", style: _actionSheetTextStyle),
        onPressed: (){

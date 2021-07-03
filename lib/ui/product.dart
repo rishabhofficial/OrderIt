@@ -48,8 +48,8 @@ class ProductPage extends StatefulWidget {
   final bool check;
   ProductPage({this.data,this.docID,this.check});
   String myEmail = "mpgonda1986@gmail.com";
-  String myPass = "ACTPA5656M";
-  String subjectBody = "ORDER - MAHESH PHARMA GONDA";
+  String myPass = "Sanjay@123";
+  String subjectBody =  " - MAHESH PHARMA GONDA";
   String emailBody = "ORDER IN STRIPS";
   String receiver = "";
   List<String> ccRecepients = List();
@@ -188,7 +188,7 @@ void mailing() async {
     ..from = new Address(widget.myEmail, 'Mahesh Pharma')
     ..ccRecipients.addAll(widget.ccRecepients)
     ..recipients.add(widget.receiver)
-    ..subject = widget.subjectBody
+    ..subject = widget.data.name + widget.subjectBody
     ..html = "<p>"+ widget.emailBody + "<p>\n\n\n\n\n" + widget.buildStringDivisionWise() + "\n\n<p>Mahesh Pharma</p><p>Gonda</p>";
 
 
@@ -369,7 +369,7 @@ for (var table in decoder.tables.keys) {
                 child: PopupMenuButton(
                  // initialValue: 1,
                   onSelected: (int) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductForm(widget.data.name)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductForm(widget.data.name,false)));
                    },
                   itemBuilder: (context) => [
                     PopupMenuItem(
@@ -469,7 +469,7 @@ for (var table in decoder.tables.keys) {
                                 onLongPress: (){
                                   return showDialog(
                                     context: context,
-                                    child: SimpleDialog(
+                                    builder: (BuildContext context) => SimpleDialog(
                                       title: Text('${rev[index]['prodName']}', textAlign: TextAlign.center ,
                                       style: TextStyle(
                                         fontSize: 25
@@ -721,7 +721,7 @@ for (var table in decoder.tables.keys) {
               autovalidate: true,
               maxLength: 50,
               icon: Icon(Icons.mail, color: Colors.grey,),
-              label: "Receiver's Email",
+              label: "Receiver",
               //initialValue: widget.data.email,
               onChanged: (value) => {
                 widget.receiver = _email.text

@@ -38,6 +38,9 @@ dependencies:
   open_file: ^3.0.1
   datetime_picker_formfield: ^1.0.0
   intl: ^0.16.1
+  loading_animations: ^2.0.0
+  flutter_typeahead: ^2.0.0
+
 
 
 

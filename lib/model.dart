@@ -74,3 +74,24 @@ class ProductData {
     };
   }
 }
+
+
+
+class ExpiryProductData {
+  String name;
+  String pack;
+  String qty;
+  String compCode;
+  String division = null;
+  String expiryDate;
+  int deal1 = 0;
+  int deal2 = 0;
+  double mrp;
+  String batchNumber;
+  double amount;
+  String partyName;
+  String colDocId;
+  String docId;
+
+  ExpiryProductData({this.name, this.pack, this.qty, this.division, this.expiryDate, this.deal1, this.deal2,this.mrp,this.batchNumber,this.compCode, this.partyName, this.colDocId, this.docId});
+}

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:startup_namer/model.dart';
 import 'package:startup_namer/ui/allProduct.dart';
+import 'package:startup_namer/ui/party.dart';
+import './expirySentProduct.dart';
 
 class ExpiryList extends StatefulWidget {
   final PartyData data;
@@ -11,6 +13,7 @@ class ExpiryList extends StatefulWidget {
 }
 
 class _ExpiryListState extends State<ExpiryList> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,10 +132,10 @@ class _ExpiryListState extends State<ExpiryList> {
                         ,),
         ),
          title: Text('${prodList['partyName']}',
-          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 22),
+          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 18),
         ),
         // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
+        
         subtitle: Column(
           children: <Widget>[
             Row(
@@ -144,22 +147,24 @@ class _ExpiryListState extends State<ExpiryList> {
             (prodList['isSettled'])?Row(
               children: <Widget>[
                 Text("Invoice Number: " ,style: TextStyle(color: Colors.white, fontSize: 16)),
-                Text('${prodList['invoiceNumber']}', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 16))
+                Flexible(child: Container(child: Text('${prodList['invoiceNumber']}',overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 16))))
               ],
             ):Container(height: 0, width: 0,),
             Row(
               children: <Widget>[
                 Text("Amount: " ,style: TextStyle(color: Colors.white,fontSize: 16)),
-                Text('\u20B9 '+ prodList['amount'].toString(), style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 16))
+                Text('\u20B9 '+ prodList['amount'].toStringAsFixed(2), style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 16))
               ],
             ),
           ],
         ),
         trailing:
             IconButton(icon: Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),onPressed: (){
-              //CompanyData data = CompanyData(email: prodList['compEmail'], name: prodList['compName']);
-              //prodList['isSettled']?Navigator.push(context, MaterialPageRoute(builder: (context) => SentItemsPage(prodList.documentID, prodList['compName']))):Navigator.push(context, 
-              //MaterialPageRoute(builder: (context) => ProductPage(data: data, docID: prodList.documentID, check: true,)));
+              PartyData data = PartyData(name: prodList['partyName'], defaultDiscount: widget.data.defaultDiscount);
+              (prodList['isSettled'])?Navigator.push(context, 
+              MaterialPageRoute(builder: (context) => ExpirySentProductList( prodList.documentID, prodList['partyName'],widget.data.defaultDiscount ,prodList['amount'] , prodList['timestamp'])))
+              :Navigator.push(context, 
+              MaterialPageRoute(builder: (context) => AllProductPage(data: data, docID: prodList.documentID, check: true, invoiceDate: prodList['timestamp'],invoiceAmount: prodList['amount'])));
               },),
              ) ,
       ),

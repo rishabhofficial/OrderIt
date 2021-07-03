@@ -7,11 +7,11 @@ import 'package:startup_namer/model.dart';
 import './form.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
-import 'transactionList.dart';
+import 'LocalPartyReport.dart';
 
 bool progress;
 
-class Key{
+class Key1{
   String name;
   String batch;
 }
@@ -46,22 +46,29 @@ class AllProductPage extends StatefulWidget {
   final PartyData data;
   final String docID;
   final bool check;
-  AllProductPage({this.data,this.docID,this.check});
+  final Timestamp invoiceDate;
+  final double invoiceAmount;
+  AllProductPage({this.data,this.docID,this.check, this.invoiceDate, this.invoiceAmount});
   
 
   List<ProductData> prodList;
 
     int x =1;
-    sendDataToFirestore(bool check) async {
+    sendDataToFirestore(bool check1) async {
     DateTime now = new DateTime.now();
-    DateTime timestamp1 = (docID == "")?new DateTime(now.year, now.month, now.day,now.hour,now.minute,now.second,now.millisecond):DateTime.parse(docID);
+    DateTime timestamp1 = check1?invoiceDate.toDate():new DateTime(now.year, now.month, now.day,now.hour,now.minute,now.second,now.millisecond);
+    DateTime timestamp2 = new DateTime(now.year, now.month, now.day,now.hour,now.minute,now.second,now.millisecond); 
     String partyName = data.name;
-    bool isSettled = check;
+    bool isSettled = false;
     double amount = 0;
     for(int i=0;i<selectedProductList.length;i++){
       amount += selectedProductList[testList[i]].amount;
     }
-      
+    
+    if(check1== true){
+          final db = Firestore.instance;
+          await db.collection('Expiry').document(docID).delete();
+      }
     final CollectionReference postsRef = Firestore.instance.collection('/Expiry');
 
     Order order = new Order();
@@ -70,8 +77,8 @@ class AllProductPage extends StatefulWidget {
     order.isSettled =  isSettled;
     order.timestamp = timestamp1;
     Map<String, dynamic> orderData = order.toJson();
-    await postsRef.document(timestamp1.toString()).setData(orderData);
-
+    await postsRef.document(timestamp2.toString()).setData(orderData);
+    
     for (int i=0 ; i< selectedProductList.length;i++){
       ProductData product = new ProductData();
       product.name        = selectedProductList[testList[i]].name;
@@ -88,12 +95,14 @@ class AllProductPage extends StatefulWidget {
      
       
       Map<String, dynamic> prodData = product.toJson();
-      Firestore.instance.collection('Expiry').document(timestamp1.toString()).collection(order.partyName).document().setData(prodData).whenComplete(() {
+      
+      Firestore.instance.collection('Expiry').document(timestamp2.toString()).collection(order.partyName).document().setData(prodData).whenComplete(() {
         if(i == selectedProductList.length-1){
             return true;
         }
       });
     }
+    
     
   }
 
@@ -125,7 +134,7 @@ void fillData(BuildContext context) {
         dataa.compCode    = doc['compCode'];
         dataa.mrp         = doc['prodMrp'];
         dataa.amount      = doc['amount'];
-        Key k = new Key();
+        Key1 k = new Key1();
         k.name = doc['prodName'];
         k.batch = doc['prodBatchNumber'];
         testList.add(k);
@@ -146,9 +155,9 @@ void fillData(BuildContext context) {
     selectedProductList.clear();
     testList.clear();
     batch.clear();
-    // if(widget.check == true){
-    //   fillData(context);
-    // }
+    if(widget.check == true){
+      fillData(context);
+     }
     super.initState();    
   }
 
@@ -157,7 +166,7 @@ void fillData(BuildContext context) {
  bool addToMap(ProductData prod) {
    bool test = true;
     setState((){
-      Key k = new Key();
+      Key1 k = new Key1();
       print(selectedProductList);
       k.name  = prod.name;
       k.batch = prod.batchNumber; 
@@ -251,15 +260,20 @@ void fillData(BuildContext context) {
             title: new Text("Products", style: TextStyle(color: Colors.white, fontSize: 22.0, fontWeight: FontWeight.w600),),
             actions: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: Icon(Icons.search),
+                padding: const EdgeInsets.only(right: 5.0),
+                child: IconButton(icon: Icon(Icons.picture_as_pdf),
+                  onPressed: ()
+                  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LocalPartyReport(partyName: widget.data.name, docID: widget.docID, defaultDisc:widget.data.defaultDiscount, invoiceDate: widget.invoiceDate, invoiceAmount: widget.invoiceAmount )));},
+                    
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
                 child: PopupMenuButton(
                  // initialValue: 1,
                   onSelected: (int) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductForm(widget.data.name)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductForm(widget.data.name,true)));
                    },
                   itemBuilder: (context) => [
                     PopupMenuItem(
@@ -352,7 +366,7 @@ void fillData(BuildContext context) {
                                 onLongPress: (){
                                   return showDialog(
                                     context: context,
-                                    child: SimpleDialog(
+                                    builder: (BuildContext context) => SimpleDialog(
                                       title: Text('${rev[index]['prodName']}', textAlign: TextAlign.center ,
                                       style: TextStyle(
                                         fontSize: 25
@@ -715,26 +729,63 @@ void fillData(BuildContext context) {
               itemCount: testList.length,
               itemBuilder: (context, index) {
 
-                    return Column(
-                      children: <Widget>[
-                      //   ListTile(title: Text('${selectedProductList[testList[index]].name}', style: TextStyle(
-                      //     fontSize: 22,
-                      //     ),),
-                          
-                      //      trailing: Row(
-                      //        mainAxisSize: MainAxisSize.min,
-                      //        children: <Widget>[
-                      //         // pressedButton(selectedProductList[testList[index]].name),
-                      //          IconButton(icon: Icon(Icons.delete), iconSize: 20 ,onPressed: () {
-                      //            setState(() {
-                      //               selectedProductList.remove(testList[index]);
-                      //               testList.remove(testList[index]);
-                      // });
-                      //          },)
-                      //        ],
-                      //      )
-                      //   ),
-                      Card(
+                    return Dismissible(
+                      key: Key(index.toString()),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction){
+                        setState(() {
+                        selectedProductList.remove(testList[index]);
+                        testList.remove(testList[index]);
+                        });
+                      },
+
+                      background: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            color: Colors.grey[400],
+            alignment: Alignment.centerRight,
+            child: Icon(Icons.delete_forever_rounded,size: 30,),
+          ),
+                      confirmDismiss: (DismissDirection direction) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Confirm"),
+        content: const Text("Are you sure you wish to delete this item?"),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text("DELETE")
+          ),
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("CANCEL"),
+          ),
+        ],
+      );
+    },
+  );
+},
+                      child: Column(
+                        children: <Widget>[
+                        //   ListTile(title: Text('${selectedProductList[testList[index]].name}', style: TextStyle(
+                        //     fontSize: 22,
+                        //     ),),
+                            
+                        //      trailing: Row(
+                        //        mainAxisSize: MainAxisSize.min,
+                        //        children: <Widget>[
+                        //         // pressedButton(selectedProductList[testList[index]].name),
+                        //          IconButton(icon: Icon(Icons.delete), iconSize: 20 ,onPressed: () {
+                        //            setState(() {
+                        //               selectedProductList.remove(testList[index]);
+                        //               testList.remove(testList[index]);
+                        // });
+                        //          },)
+                        //        ],
+                        //      )
+                        //   ),
+                        Card(
       elevation: 10.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
@@ -747,171 +798,210 @@ void fillData(BuildContext context) {
               border: new Border(
                   right: new BorderSide(width: 0.5, color: Colors.white24))),
           child: IconButton(icon: Icon(Icons.edit), iconSize: 25 ,onPressed: (){
-                                      TextEditingController _name   = TextEditingController(text: selectedProductList[testList[index]].name);
-                                      TextEditingController _pack   = TextEditingController(text: selectedProductList[testList[index]].pack);
-                                      TextEditingController _mrp    = TextEditingController(text: selectedProductList[testList[index]].mrp.toString());
-                                      TextEditingController _expiry = TextEditingController(text: selectedProductList[testList[index]].expiryDate);
-                                      TextEditingController _batch  = TextEditingController(text: selectedProductList[testList[index]].batchNumber);
-                                      TextEditingController _qty    = TextEditingController(text: selectedProductList[testList[index]].qty);
-                                      TextEditingController _deal1  = TextEditingController(text: selectedProductList[testList[index]].deal1.toString());
-                                      TextEditingController _deal2  = TextEditingController(text: selectedProductList[testList[index]].deal2.toString());
-                                      FocusNode qtyFocusNode = new FocusNode();
-                                      FocusNode pack         = new FocusNode();
-                                      FocusNode mrp          = new FocusNode();
-                                      FocusNode expiry       = new FocusNode();
-                                      FocusNode batch1        = new FocusNode();
-                                      FocusNode deal1        = new FocusNode();
-                                      FocusNode deal2        = new FocusNode();
-                                      bool _validate  = false;
-                                      showDialog(                                             
-                                        context: context,
-                                        builder: (context) {
-                                         // FocusNode inputOne = FocusNode();
-                                          return AlertDialog(
-                                           // contentPadding: EdgeInsets.all(0.0),
-                                            title: new Text('${selectedProductList[testList[index]].name}'),
-                                            content: Column(mainAxisSize: MainAxisSize.min ,children: <Widget>[
-                                            TextField(
-                                              autofocus: true,
-                                              keyboardType: TextInputType.text,
-                                              controller: _name,
-                                              decoration: new InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                              labelText: "Name",
-                                              //errorText: _validate ? "*Required" : null,
-                                              fillColor: Colors.black,
-                                              border: new OutlineInputBorder(
-                                                borderRadius: new BorderRadius.circular(15.0), 
-                                                borderSide: new BorderSide(),
-                                                ),
-                                              ),
-                                              onChanged: (text) {
-                                                selectedProductList[testList[index]].name = _name.text;
-                                              },
-                                              onSubmitted: (text) {
-                                                FocusScope.of(context).requestFocus(pack);
-                                              },                                           
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 8),
-                                              child: TextField(
-                                                focusNode: pack,
+                                        TextEditingController _name   = TextEditingController(text: selectedProductList[testList[index]].name);
+                                        TextEditingController _pack   = TextEditingController(text: selectedProductList[testList[index]].pack);
+                                        TextEditingController _mrp    = TextEditingController(text: selectedProductList[testList[index]].mrp.toString());
+                                        TextEditingController _expiry = TextEditingController(text: selectedProductList[testList[index]].expiryDate);
+                                        TextEditingController _batch  = TextEditingController(text: selectedProductList[testList[index]].batchNumber);
+                                        TextEditingController _qty    = TextEditingController(text: selectedProductList[testList[index]].qty);
+                                        TextEditingController _deal1  = TextEditingController(text: selectedProductList[testList[index]].deal1.toString());
+                                        TextEditingController _deal2  = TextEditingController(text: selectedProductList[testList[index]].deal2.toString());
+                                        FocusNode qtyFocusNode = new FocusNode();
+                                        FocusNode pack         = new FocusNode();
+                                        FocusNode mrp          = new FocusNode();
+                                        FocusNode expiry       = new FocusNode();
+                                        FocusNode batch1        = new FocusNode();
+                                        FocusNode deal1        = new FocusNode();
+                                        FocusNode deal2        = new FocusNode();
+                                        bool _validate  = false;
+                                        showDialog(                                             
+                                          context: context,
+                                          builder: (context) {
+                                           // FocusNode inputOne = FocusNode();
+                                            return AlertDialog(
+                                             // contentPadding: EdgeInsets.all(0.0),
+                                              title: new Text('${selectedProductList[testList[index]].name}'),
+                                              content: Container(
+                                                height: 200,
+                                                width: 300,
+                                                child: SingleChildScrollView(
+                                                child:Column(
+                                                  mainAxisSize: MainAxisSize.min ,
+                                                  children: <Widget>[
+                                              TextField(
+                                                autofocus: true,
                                                 keyboardType: TextInputType.text,
-                                                controller: _pack,
+                                                controller: _name,
                                                 decoration: new InputDecoration(
                                                 contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                                labelText: "Pack",
+                                                labelText: "Name",
                                                 //errorText: _validate ? "*Required" : null,
                                                 fillColor: Colors.black,
                                                 border: new OutlineInputBorder(
                                                   borderRadius: new BorderRadius.circular(15.0), 
                                                   borderSide: new BorderSide(),
-                                                  ),),
-                                              onChanged: (text) {
-                                                selectedProductList[testList[index]].pack = _pack.text;
+                                                  ),
+                                                ),
+                                                onChanged: (text) {
+                                                  selectedProductList[testList[index]].name = _name.text;
                                                 },
                                                 onSubmitted: (text) {
-                                                  FocusScope.of(context).requestFocus(mrp);
-                                                },
-                                            
-                                              //prod.qty = _textFieldController.text
-                                            ),),
-                                            Padding(
-                                    
-                                              padding: EdgeInsets.only(top: 8),
-                                            child: TextField(
-                                              focusNode: mrp,
-                                             // autofocus: true,
-                                              keyboardType: TextInputType.number,
-                                              controller: _mrp,
-                                              decoration: new InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                               labelText: "MRP",
-                               //errorText: _validate ? "*Required" : null,
-                                 fillColor: Colors.black,
-                               border: new OutlineInputBorder(
-                                 borderRadius: new BorderRadius.circular(15.0), 
-                                 borderSide: new BorderSide(),
-                                ),),
-                                              onChanged: (text) {
-                                                selectedProductList[testList[index]].mrp = double.parse(_mrp.text);
-                                                },
-                                                onSubmitted: (text) {
-                                                  FocusScope.of(context).requestFocus(expiry);
-                                                },
-                                             ),),
-                                          Padding(
-                                            padding: EdgeInsets.only(top: 8),
-                                            child: TextField(
-                                              focusNode: expiry,
-                                              keyboardType: TextInputType.number,
-                                              controller: _expiry,
-                                              decoration: new InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                              labelText: "Expiry Date",
-                                              //errorText: _validate ? "*Required" : null,
-                                              fillColor: Colors.black,
-                                              border: new OutlineInputBorder(
-                                              borderRadius: new BorderRadius.circular(15.0), 
-                                              borderSide: new BorderSide(),
+                                                  FocusScope.of(context).requestFocus(pack);
+                                                },                                           
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 8),
+                                                child: TextField(
+                                                  focusNode: pack,
+                                                  keyboardType: TextInputType.text,
+                                                  controller: _pack,
+                                                  decoration: new InputDecoration(
+                                                  contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                                  labelText: "Pack",
+                                                  //errorText: _validate ? "*Required" : null,
+                                                  fillColor: Colors.black,
+                                                  border: new OutlineInputBorder(
+                                                    borderRadius: new BorderRadius.circular(15.0), 
+                                                    borderSide: new BorderSide(),
+                                                    ),),
+                                                onChanged: (text) {
+                                                  selectedProductList[testList[index]].pack = _pack.text;
+                                                  },
+                                                  onSubmitted: (text) {
+                                                    FocusScope.of(context).requestFocus(mrp);
+                                                  },
+                                              
+                                                //prod.qty = _textFieldController.text
                                               ),),
-                                              onChanged: (text) {
-                                                selectedProductList[testList[index]].expiryDate = _expiry.text;
-                                                },
-                                                onSubmitted: (text) {
-                                                  FocusScope.of(context).requestFocus(batch1);
-                                                },
-                                            
-                                              //prod.qty = _textFieldController.text
-                                            ),),
+                                              Padding(
+                                      
+                                                padding: EdgeInsets.only(top: 8),
+                                              child: TextField(
+                                                focusNode: mrp,
+                                               // autofocus: true,
+                                                keyboardType: TextInputType.number,
+                                                controller: _mrp,
+                                                decoration: new InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                 labelText: "MRP",
+                                 //errorText: _validate ? "*Required" : null,
+                                   fillColor: Colors.black,
+                                 border: new OutlineInputBorder(
+                                   borderRadius: new BorderRadius.circular(15.0), 
+                                   borderSide: new BorderSide(),
+                                  ),),
+                                                onChanged: (text) {
+                                                  selectedProductList[testList[index]].mrp = double.parse(_mrp.text);
+                                                  },
+                                                  onSubmitted: (text) {
+                                                    FocusScope.of(context).requestFocus(expiry);
+                                                  },
+                                               ),),
                                             Padding(
                                               padding: EdgeInsets.only(top: 8),
-                                            child: TextField(
-                                              focusNode: batch1,
-                                             // autofocus: true,
-                                              keyboardType: TextInputType.text,
-                                              controller: _batch,
-                                              decoration: new InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                              labelText: "Batch Number",
-                                              //errorText: _validate ? "*Batch Number already used for this product" : null,
-                                              fillColor: Colors.black,
-                                              border: new OutlineInputBorder(
+                                              child: TextField(
+                                                focusNode: expiry,
+                                                keyboardType: TextInputType.number,
+                                                controller: _expiry,
+                                                decoration: new InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                                labelText: "Expiry Date",
+                                                //errorText: _validate ? "*Required" : null,
+                                                fillColor: Colors.black,
+                                                border: new OutlineInputBorder(
                                                 borderRadius: new BorderRadius.circular(15.0), 
                                                 borderSide: new BorderSide(),
+                                                ),),
+                                                onChanged: (text) {
+                                                  selectedProductList[testList[index]].expiryDate = _expiry.text;
+                                                  },
+                                                  onSubmitted: (text) {
+                                                    FocusScope.of(context).requestFocus(batch1);
+                                                  },
+                                              
+                                                //prod.qty = _textFieldController.text
                                               ),),
-                                              onChanged: (text) {
-                                                selectedProductList[testList[index]].batchNumber = _batch.text.toUpperCase();
-                                              },
-                                              onSubmitted: (text) {
-                                                  FocusScope.of(context).requestFocus(deal1);
-                                                },
-                                              // onSubmitted: (text) {
-                                              //   if (batch.containsKey(selectedProductList[testList[index]].batchNumber) && selectedProductList[testList[index]].name == batch[selectedProductList[testList[index]].batchNumber]){
-                                              //     setState(() {
-                                              //       _validate = true;
-                                              //     });
-                                              //   }
-                                              //   else{
-                                              //   setState(() {
-                                              //     _validate = false;
-                                              //   });}}
-                                             
-                                            
-                                              //prod.qty = _textFieldController.text
-                                            ),),
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 8),
-                                            child: Row(
-                                              children: <Widget>[
-                                                Flexible(
-                                            child: Padding(
-                                              padding: EdgeInsets.only(right:4),
-                                                child: TextField(
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 8),
+                                              child: TextField(
+                                                focusNode: batch1,
                                                // autofocus: true,
-                                                  focusNode: deal1,
+                                                keyboardType: TextInputType.text,
+                                                controller: _batch,
+                                                decoration: new InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                                labelText: "Batch Number",
+                                                //errorText: _validate ? "*Batch Number already used for this product" : null,
+                                                fillColor: Colors.black,
+                                                border: new OutlineInputBorder(
+                                                  borderRadius: new BorderRadius.circular(15.0), 
+                                                  borderSide: new BorderSide(),
+                                                ),),
+                                                onChanged: (text) {
+                                                  selectedProductList[testList[index]].batchNumber = _batch.text.toUpperCase();
+                                                },
+                                                onSubmitted: (text) {
+                                                    FocusScope.of(context).requestFocus(deal1);
+                                                  },
+                                                // onSubmitted: (text) {
+                                                //   if (batch.containsKey(selectedProductList[testList[index]].batchNumber) && selectedProductList[testList[index]].name == batch[selectedProductList[testList[index]].batchNumber]){
+                                                //     setState(() {
+                                                //       _validate = true;
+                                                //     });
+                                                //   }
+                                                //   else{
+                                                //   setState(() {
+                                                //     _validate = false;
+                                                //   });}}
+                                               
+                                              
+                                                //prod.qty = _textFieldController.text
+                                              ),),
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 8),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Flexible(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(right:4),
+                                                  child: TextField(
+                                                 // autofocus: true,
+                                                    focusNode: deal1,
+                                                    keyboardType: TextInputType.number,
+                                                    controller: _deal1,
+                                                    decoration: new InputDecoration(
+                                                    contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                                    labelText: "Deal",
+                                                    fillColor: Colors.black,
+                                                    border: new OutlineInputBorder(
+                                                      borderRadius: new BorderRadius.circular(15.0), 
+                                                      borderSide: new BorderSide(),
+                                                     ),
+                                                    ),
+                                                    onChanged: (text) {
+                                                      if(_deal1.text == ""){
+                                                      selectedProductList[testList[index]].deal1 = 0;
+                                                    }
+                                                    else
+                                                      selectedProductList[testList[index]].deal1 = int.parse(_deal1.text);
+                                                    },
+                                                    onSubmitted: (text) {
+                                                      FocusScope.of(context).requestFocus(deal2);
+                                                    },
+                                                
+                                                  //prod.qty = _textFieldController.text
+                                                ),
+                                              ),
+                                                  ),
+                                                  Icon(Icons.add),
+                                              Flexible(
+                                                    child: Padding(
+                                                         padding: EdgeInsets.only(left: 4),                                               
+                                                         child: TextField(
+                                                           focusNode: deal2,
+                                                 // autofocus: true,
                                                   keyboardType: TextInputType.number,
-                                                  controller: _deal1,
+                                                  controller: _deal2,
                                                   decoration: new InputDecoration(
                                                   contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                                                   labelText: "Deal",
@@ -919,131 +1009,98 @@ void fillData(BuildContext context) {
                                                   border: new OutlineInputBorder(
                                                     borderRadius: new BorderRadius.circular(15.0), 
                                                     borderSide: new BorderSide(),
-                                                   ),
-                                                  ),
+                                                  ),),
                                                   onChanged: (text) {
-                                                    if(_deal1.text == ""){
-                                                    selectedProductList[testList[index]].deal1 = 0;
-                                                  }
-                                                  else
-                                                    selectedProductList[testList[index]].deal1 = int.parse(_deal1.text);
+                                                    if(_deal2.text == ""){
+                                                      selectedProductList[testList[index]].deal2 = 0;
+                                                    }
+                                                    else
+                                                      selectedProductList[testList[index]].deal2 = int.parse(_deal2.text);
                                                   },
-                                                  onSubmitted: (text) {
-                                                    FocusScope.of(context).requestFocus(deal2);
-                                                  },
-                                              
-                                                //prod.qty = _textFieldController.text
-                                              ),
-                                            ),
+                                                      onSubmitted: (text) {
+                                                        FocusScope.of(context).requestFocus(qtyFocusNode);
+                                                      },
+                                                
+                                                  //prod.qty = _textFieldController.text
                                                 ),
-                                                Icon(Icons.add),
-                                            Flexible(
-                                                  child: Padding(
-                                                       padding: EdgeInsets.only(left: 4),                                               
-                                                       child: TextField(
-                                                         focusNode: deal2,
-                                               // autofocus: true,
+                                                    ),
+                                              ),
+                                              ],), 
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 8),
+                                                child: TextField(
+                                                focusNode: qtyFocusNode,
                                                 keyboardType: TextInputType.number,
-                                                controller: _deal2,
+                                                controller: _qty,
                                                 decoration: new InputDecoration(
                                                 contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                                labelText: "Deal",
-                                                fillColor: Colors.black,
+                                                labelText: "Quantity",
+                                                 errorText: _validate ? "*Required" : null,
+                                                  fillColor: Colors.black,
                                                 border: new OutlineInputBorder(
                                                   borderRadius: new BorderRadius.circular(15.0), 
                                                   borderSide: new BorderSide(),
-                                                ),),
-                                                onChanged: (text) {
-                                                  if(_deal2.text == ""){
-                                                    selectedProductList[testList[index]].deal2 = 0;
+                                                ),
+                                                ),                            
+                                                onSubmitted: (text) {
+                                                  if (_qty.text == ""){
+                                                    setState(() {
+                                                      _validate = true;
+                                                    });
                                                   }
-                                                  else
-                                                    selectedProductList[testList[index]].deal2 = int.parse(_deal2.text);
-                                                },
-                                                    onSubmitted: (text) {
-                                                      FocusScope.of(context).requestFocus(qtyFocusNode);
-                                                    },
-                                              
-                                                //prod.qty = _textFieldController.text
-                                              ),
-                                                  ),
-                                            ),
-                                            ],), 
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 8),
-                                              child: TextField(
-                                              focusNode: qtyFocusNode,
-                                              keyboardType: TextInputType.number,
-                                              controller: _qty,
-                                              decoration: new InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                              labelText: "Quantity",
-                                               errorText: _validate ? "*Required" : null,
-                                                fillColor: Colors.black,
-                                              border: new OutlineInputBorder(
-                                                borderRadius: new BorderRadius.circular(15.0), 
-                                                borderSide: new BorderSide(),
-                                              ),
-                                              ),                            
-                                              onSubmitted: (text) {
-                                                if (_qty.text == ""){
+                                                  else{
                                                   setState(() {
-                                                    _validate = true;
+                                                    _validate = false;
                                                   });
-                                                }
-                                                else{
-                                                setState(() {
-                                                  _validate = false;
-                                                });
-                                                selectedProductList[testList[index]].qty = _qty.text;
-                                                Navigator.of(context).pop();
-                                                if(selectedProductList[testList[index]].deal1 != 0 && selectedProductList[testList[index]].deal2 != 0){
-                                                selectedProductList[testList[index]].amount = double.parse(selectedProductList[testList[index]].qty) * selectedProductList[testList[index]].mrp * (1 - (min(selectedProductList[testList[index]].deal1,selectedProductList[testList[index]].deal2)/(selectedProductList[testList[index]].deal1 + selectedProductList[testList[index]].deal2)));
-                                                print(widget.data.defaultDiscount);
-                                                }
-                                                else{
-                                                  selectedProductList[testList[index]].amount = double.parse(selectedProductList[testList[index]].qty) * selectedProductList[testList[index]].mrp;
-                                                }
-                                                selectedProductList[testList[index]].amount = double.parse((selectedProductList[testList[index]].amount - (widget.data.defaultDiscount/100)*selectedProductList[testList[index]].amount).toStringAsFixed(3));
-                                              
-                    
-                                                // if(batch.containsKey(selectedProductList[testList[index]].batchNumber)){
-                                                //   print("inside show");
-                                                //   return showDialog(
-                                                //     context: context,  
-                                                //   builder: (BuildContext context) {  
-                                                //     return AlertDialog(
-                                                //       title: Text( prod.name +" with batch number " + prod.batchNumber + " already exists."),
-                                                //       actions: [
-                                                //         FlatButton(  
-                                                //           child: Text("OK"),  
-                                                //           onPressed: () {  
-                                                //             Navigator.of(context).pop();  
-                                                //           },  
-                                                //         )]);
-                                                //   });
-                                                // }
-                                                 _qty.clear();
-                                                 _batch.clear();
-                                                 _mrp.clear(); _deal1.clear(); _deal2.clear(); _expiry.clear();
-                                                }},
-                                            
-                                            )),
-                                            ],),
-                                            
-                                            actions: <Widget>[
-                                              new FlatButton(
-                                                child: new Text("Close"),
-                                                onPressed: () {
+                                                  selectedProductList[testList[index]].qty = _qty.text;
                                                   Navigator.of(context).pop();
-                                                  _textFieldController.clear();
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );  
+                                                  if(selectedProductList[testList[index]].deal1 != 0 && selectedProductList[testList[index]].deal2 != 0){
+                                                  selectedProductList[testList[index]].amount = double.parse(selectedProductList[testList[index]].qty) * selectedProductList[testList[index]].mrp * (1 - (min(selectedProductList[testList[index]].deal1,selectedProductList[testList[index]].deal2)/(selectedProductList[testList[index]].deal1 + selectedProductList[testList[index]].deal2)));
+                                                  print(widget.data.defaultDiscount);
+                                                  }
+                                                  else{
+                                                    selectedProductList[testList[index]].amount = double.parse(selectedProductList[testList[index]].qty) * selectedProductList[testList[index]].mrp;
+                                                  }
+                                                  selectedProductList[testList[index]].amount = double.parse((selectedProductList[testList[index]].amount - (widget.data.defaultDiscount/100)*selectedProductList[testList[index]].amount).toStringAsFixed(3));
+                                                
+                      
+                                                  // if(batch.containsKey(selectedProductList[testList[index]].batchNumber)){
+                                                  //   print("inside show");
+                                                  //   return showDialog(
+                                                  //     context: context,  
+                                                  //   builder: (BuildContext context) {  
+                                                  //     return AlertDialog(
+                                                  //       title: Text( prod.name +" with batch number " + prod.batchNumber + " already exists."),
+                                                  //       actions: [
+                                                  //         FlatButton(  
+                                                  //           child: Text("OK"),  
+                                                  //           onPressed: () {  
+                                                  //             Navigator.of(context).pop();  
+                                                  //           },  
+                                                  //         )]);
+                                                  //   });
+                                                  // }
+                                                   _qty.clear();
+                                                   _batch.clear();
+                                                   _mrp.clear(); _deal1.clear(); _deal2.clear(); _expiry.clear();
+                                                  }},
+                                              
+                                              )),
+                                              ],))),
+                                              
+                                              actions: <Widget>[
+                                                new FlatButton(
+                                                  child: new Text("Close"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    _textFieldController.clear();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );  
           })
         ),
          title: Text('${selectedProductList[testList[index]].name}',
@@ -1058,7 +1115,7 @@ void fillData(BuildContext context) {
             Text('${selectedProductList[testList[index]].pack}', style: TextStyle(color: Colors.black)),
             SizedBox(width: 5),
             Text("Expiry Date: ", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
-            Text('${selectedProductList[testList[index]].expiryDate}', style: TextStyle(color: Colors.black)),
+            Text('${selectedProductList[testList[index]].expiryDate}', overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black)),
             
             ],
         ),
@@ -1067,8 +1124,8 @@ void fillData(BuildContext context) {
             Text("Batch No.: ", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
             Text('${selectedProductList[testList[index]].batchNumber}', style: TextStyle(color: Colors.black)),
             SizedBox(width: 5),
-            Text("MRP: ", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
-            Text('\u20B9 ${selectedProductList[testList[index]].mrp}', style: TextStyle(color: Colors.black)),
+            Text("MRP: ", overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
+            Flexible(child: Text('\u20B9 ${selectedProductList[testList[index]].mrp}', overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black))),
 
           ],
         ),
@@ -1088,7 +1145,7 @@ void fillData(BuildContext context) {
              Padding(padding: EdgeInsets.all(8),
              child: Column(children: <Widget>[
                Text("Amount", style: TextStyle(color: Colors.black)),
-            Text('\u20B9 ${selectedProductList[testList[index]].amount}', style: TextStyle(color: Colors.black, fontSize: 25)),
+            Text('\u20B9 ${selectedProductList[testList[index]].amount}', style: TextStyle(color: Colors.black, fontSize: 20)),
              ])
              )
            
@@ -1097,10 +1154,12 @@ void fillData(BuildContext context) {
              ) ,
       ),
     )
-                       // Divider(height: 1.0,)
-                      ],
-                    
-                  );}
+    
+                         // Divider(height: 1.0,)
+                        ],
+                      
+                  ),
+                    );}
                 ,
               )))])
               
@@ -1137,7 +1196,7 @@ void fillData(BuildContext context) {
                   },
                 );
                
-                widget.sendDataToFirestore(false);
+                widget.sendDataToFirestore(widget.check);
                 new Future.delayed(new Duration(seconds: 10), () {
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => ExpiryList(widget.data)));
                 Navigator.pop(context);
