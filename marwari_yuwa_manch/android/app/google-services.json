@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "997455022517",
+    "project_id": "marwari-yuwa-manch",
+    "storage_bucket": "marwari-yuwa-manch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997455022517:android:9c6a19f0228ab7c67ab1fc",
+        "android_client_info": {
+          "package_name": "com.example.marwari_yuwa_manch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997455022517-dr2ghrmeql0crtmtft008ls5nc49d039.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.marwari_yuwa_manch",
+            "certificate_hash": "7d309c66750410919c1adc2209212c090bac43f5"
+          }
+        },
+        {
+          "client_id": "997455022517-m96fhjsnu96807nioph91rgcql74t6c4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_UsZpro_krb6naFwEy968p7krf8Iymic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997455022517-m96fhjsnu96807nioph91rgcql74t6c4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
