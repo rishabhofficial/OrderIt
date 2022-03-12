@@ -498,6 +498,19 @@ for (var table in decoder.tables.keys) {
                                   //Navigator.of(context).pop();
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProductUpdateForm(dataa,rev[index].documentID,widget.data.name)));
                                 },
+                              ),
+                              Divider(height: 1,),
+                              SimpleDialogOption(
+                                child: Text("Move Product", style: TextStyle(
+                                  fontSize: 23
+                                ),textAlign: TextAlign.center,
+                                ),
+                                onPressed: (){
+                                  Navigator.of(context, rootNavigator: true).pop();
+                                  ProductData dataa = ProductData(name: rev[index]['prodName'], pack: rev[index]['prodPack'], division: rev[index]['prodDivision']);
+                                  //Navigator.of(context).pop();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProductUpdateForm(dataa,rev[index].documentID,widget.data.name)));
+                                },
                               )
                             ],
                         ),
@@ -713,12 +726,14 @@ for (var table in decoder.tables.keys) {
                     child: Form(
                       key: _formKey,
         child: CardSettings(
-          children: <Widget>[
-            CardSettingsHeader(label: 'Email Details', color: Color.fromRGBO(58, 66, 86, 1.0),),
+          children: <CardSettingsSection>[
+            CardSettingsSection(
+            header: CardSettingsHeader(label: 'Email Details', color: Color.fromRGBO(58, 66, 86, 1.0),),
+            children: <CardSettingsWidget>[
             CardSettingsEmail(
               controller: _email,
               requiredIndicator: Text("*"),
-              autovalidate: true,
+              //autovalidate: true,
               maxLength: 50,
               icon: Icon(Icons.mail, color: Colors.grey,),
               label: "Receiver",
@@ -816,7 +831,7 @@ for (var table in decoder.tables.keys) {
               },
             )
 
-          ],
+          ])],
         ))
        ),]
        ),)     

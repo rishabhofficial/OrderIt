@@ -15,6 +15,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
+
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
     <!-- <uses-sdk android:minSdkVersion="14" /> -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -83,8 +92,8 @@
         </service>
 
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.startup_namer.fileProvider"
+            android:name="com.crazecoder.openfile.FileProvider"
+            android:authorities="com.example.startup_namer.fileProvider.com.crazecoder.openfile"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data

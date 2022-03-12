@@ -1,4 +1,0 @@
-#Tue Jun 08 13:02:02 IST 2021
-base.0=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\r8\\release\\0
-renamed.0=classes.dex
-path.0=classes.dex

@@ -1,9 +1,9 @@
-#Tue Jun 08 12:51:10 IST 2021
-base.2=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+#Sat Mar 12 22:27:32 IST 2022
+base.2=F\:\\flutter_new\\OrderIt\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
 path.2=classes3.dex
-base.1=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+base.1=F\:\\flutter_new\\OrderIt\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
 path.1=classes2.dex
-base.0=D\:\\flutter_projects\\startup_namer\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+base.0=F\:\\flutter_new\\OrderIt\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
