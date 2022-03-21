@@ -369,6 +369,7 @@ _displaySnackBar(String action){
   }
 }
 
+
 class ProductForm extends StatefulWidget {
 
   final String compName;
@@ -619,7 +620,8 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
 
 TextEditingController _name = TextEditingController();
 TextEditingController _pack = TextEditingController();
-TextEditingController _div = TextEditingController();
+TextEditingController _comp = TextEditingController();
+TextEditingController _div  = TextEditingController();
 ProductData newProd = ProductData();
 bool test = true;
 
@@ -628,8 +630,32 @@ void initState(){
   super.initState();
   _name.text = widget.initialData.name;
   _pack.text = widget.initialData.pack;
-  _div.text = widget.initialData.division;
+  _div.text  = widget.initialData.division;
+  _comp.text = widget.compName;
+  populateComp();
 }
+
+List<String> _companies = List();
+String company;
+  void populateComp(){
+  _companies.clear();
+    Firestore.instance.collection("Company").orderBy('compName').snapshots().listen((event) {
+      event.documents.forEach((element) {
+        if(!_companies.contains(element.data['compName']))
+        _companies.add(element.data['compName']); 
+      });
+    });
+    //print(_companies);
+  }
+
+  List comp = List();
+  FutureOr<Iterable<dynamic>> getSuggestions(String pattern){
+      comp.clear();
+    _companies.forEach((element) {
+      element.startsWith(pattern.toUpperCase())?comp.add(element):null;
+      });
+      return comp;
+  }
 
 _displaySnackBar(String action){
            final snackbar = SnackBar(content: Text(action));
@@ -691,13 +717,47 @@ _displaySnackBar(String action){
               ),
             ),
             Padding(
+                padding:EdgeInsets.only(top: 30, left: 20, right: 20),
+                child: TypeAheadField(
+                  textFieldConfiguration: TextFieldConfiguration(
+                  autofocus: false,
+                  controller: _comp,
+                //   style: DefaultTextStyle.of(context).style.copyWith(
+                //   fontStyle: FontStyle.italic
+                // ),
+                  decoration: new InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                               labelText: "Company",
+                                 fillColor: Colors.black,
+                               border: new OutlineInputBorder(
+                                 borderRadius: new BorderRadius.circular(15.0), 
+                                 borderSide: new BorderSide(),
+                                ),)
+                ),
+                  suggestionsCallback: (pattern)  {
+                    return  getSuggestions(pattern);
+  },
+  itemBuilder: (context, suggestion) {
+    return ListTile(
+      title: Text(suggestion),
+    );
+  },
+  onSuggestionSelected: (suggestion) {
+    setState(() {
+      _comp.text = suggestion.toString();
+    });
+  },
+)
+
+            ),
+            Padding(
               padding: EdgeInsets.only(top: 30, left: 20, right: 20,bottom: 30),
               child: TextField(
                 controller: _div,
                 decoration: new InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                                labelText: "Division",
-                               enabled: (widget.compName == "ALKEM" || widget.compName == "ABT INDIA")?true:false,
+                               enabled: true,
                                  fillColor: Colors.black,
                                border: new OutlineInputBorder(
                                  borderRadius: new BorderRadius.circular(15.0), 
@@ -716,17 +776,19 @@ _displaySnackBar(String action){
               onPressed: () async {
                 FocusScope.of(context).unfocus();
                 setState(() {
-                 newProd.name = _name.text;
-                 newProd.pack = _pack.text; 
+                 newProd.name     = _name.text;
+                 newProd.compCode = _comp.text;
+                 newProd.pack     = _pack.text; 
                  newProd.division = _div.text; 
                 });
       Map<String, dynamic> addProd = newProd.toJson();
-      Firestore.instance.collection(widget.compName).document(widget.docId).updateData(addProd).whenComplete((){
+      Firestore.instance.collection("AllProducts").document(widget.docId).updateData(addProd).whenComplete((){
           _displaySnackBar("Successfully updated to database");
           test = true;
           _name.clear();
           _pack.clear();
           _div.clear();
+          _comp.clear();
       }).catchError((e) {
              test = false;
       });

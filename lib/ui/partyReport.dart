@@ -15,7 +15,7 @@ int claim;
   String address = "";
   String location = "";
   String code = "";
-  List<dynamic> divi;
+  List<dynamic> divi = [];
   List<ExpiryProductData> partyWiseList = List();
 
 class PartyReport extends StatefulWidget {
@@ -290,12 +290,23 @@ pdfGenerator(dynamic m){
       company = "MANKIND";
 
       //divi.clear();
-      divi = ["MANKIND (GRAVITOS)","MANKIND-CEREBRIS","MANKIND-ZESTEVA","MANKIND-CURIS","MANKIND-DISCOVERY","MANKIND-LIFESTAR","MANKIND-FUTURE","MANKIND-MAIN","MANKIND-MAGNET","MANKIND-NOBLIS","MANKIND-SPECIAL"];
-    }
+      _companies.forEach((value){
+        if (value.contains("MANKIND")) {
+          if (!value.contains("MANKIND-M")) {
+          divi.add(value);}
+        };
+      });
+     divi = ["MANKIND (GRAVITOS)","MANKIND-CEREBRIS","MANKIND-ZESTEVA","MANKIND-CURIS","MANKIND-DISCOVERY","MANKIND-FUTURE","MANKIND-MAIN","MANKIND-MAGNET","MANKIND-NOBLIS","MANKIND-SPECIAL"];
+    };
     if(comp.contains("ARISTO")){
       company = "ARISTO";
-      divi = ["ARISTO-MF1","ARISTO-MF2","ARISTO-MF3","ARISTO-TF","ARISTO-GENETICA"];
-    }
+       _companies.forEach((value){
+        if (value.contains("ARISTO")) {
+          divi.add(value);
+        };
+      });
+     // divi = ["ARISTO-MF1","ARISTO-MF2","ARISTO-MF3","ARISTO-TF","ARISTO-GENETICA"];
+    };
     Firestore.instance.collection("Company").where('compName', isEqualTo : comp).snapshots().listen((event) {
       event.documents.forEach((value) {
         address = (value.data['compMailingName']== null)?"":value.data['compMailingName'];

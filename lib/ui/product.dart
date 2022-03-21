@@ -432,7 +432,10 @@ for (var table in decoder.tables.keys) {
               ),
                 Expanded(
                 child: StreamBuilder(
-                stream: Firestore.instance.collection(widget.data.name).where("prodName" , isGreaterThanOrEqualTo:  search).snapshots(),
+                stream: Firestore.instance.collection("AllProducts")
+                .where("compCode", isEqualTo: widget.data.name)
+                .orderBy("prodName")
+                .snapshots(),
                 builder: (context, snapshot){
                   if(!snapshot.hasData){
                     return Center(
@@ -499,19 +502,6 @@ for (var table in decoder.tables.keys) {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProductUpdateForm(dataa,rev[index].documentID,widget.data.name)));
                                 },
                               ),
-                              Divider(height: 1,),
-                              SimpleDialogOption(
-                                child: Text("Move Product", style: TextStyle(
-                                  fontSize: 23
-                                ),textAlign: TextAlign.center,
-                                ),
-                                onPressed: (){
-                                  Navigator.of(context, rootNavigator: true).pop();
-                                  ProductData dataa = ProductData(name: rev[index]['prodName'], pack: rev[index]['prodPack'], division: rev[index]['prodDivision']);
-                                  //Navigator.of(context).pop();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProductUpdateForm(dataa,rev[index].documentID,widget.data.name)));
-                                },
-                              )
                             ],
                         ),
                     );
