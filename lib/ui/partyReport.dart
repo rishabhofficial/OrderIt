@@ -62,7 +62,7 @@ class _PartyReportState extends State<PartyReport> {
                       .collection('Expiry')
                       .doc(element.id)
                       .collection(element['partyName'])
-                      .where('compCode', whereIn: divi)
+                      .where('compCode', isGreaterThan: comp)
                       .snapshots()
                       .listen((cour) => cour.docs.forEach((doc) {
                             print("Inside Firestore");
@@ -71,21 +71,15 @@ class _PartyReportState extends State<PartyReport> {
                             prod.qty =
                                 int.parse(doc.data()['prodQty']).toString();
                             prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
-                            prod.name = doc.data()['prodName'];
                             prod.pack = doc.data()['prodPack'];
                             prod.mrp = doc.data()['prodMrp'];
                             prod.expiryDate = doc.data()['prodExpiryDate'];
                             prod.batchNumber = doc.data()['prodBatchNumber'];
                             prod.compCode = doc.data()['compCode'];
+                            if (doc.data()['compCode'] == "MANKIND-M") {
+                              prod.compCode = "MANKIND-MAIN";
+                            }
+
                             product.qty =
                                 int.parse(doc.data()['prodQty']).toString();
                             product.name = doc.data()['prodName'];
@@ -93,7 +87,7 @@ class _PartyReportState extends State<PartyReport> {
                             product.mrp = doc.data()['prodMrp'];
                             product.expiryDate = doc.data()['prodExpiryDate'];
                             product.batchNumber = doc.data()['prodBatchNumber'];
-                            product.compCode = doc.data()['compCode'];
+                            product.compCode = prod.compCode;
                             product.partyName = element['partyName'];
                             product.colDocId = element.id;
                             product.docId = doc.id;
@@ -181,7 +175,6 @@ class _PartyReportState extends State<PartyReport> {
                                 m[prod.name] = [];
                               }
                               m[prod.name].add(prod);
-
                             }
                           }));
                 }));
@@ -258,7 +251,7 @@ class _PartyReportState extends State<PartyReport> {
 
     final pdfBytes = List.from(await doc.save());
     if (pdfBytes.length > 0) {
-      openFile(pdfBytes);
+      openFile(pdfBytes.cast<int>());
     }
   }
 
@@ -308,37 +301,40 @@ class _PartyReportState extends State<PartyReport> {
 
     final pdfBytes = List.from(await doc.save());
     if (pdfBytes.length > 0) {
-      openFile(pdfBytes);
+      openFile(pdfBytes.cast<int>());
     }
   }
 
   void _populate_comp_details(String comp) {
+    divi.clear();
+
     if (comp.contains("MANKIND")) {
       company = "MANKIND";
 
-      //divi.clear();
+
       _companies.forEach((value) {
         if (value.contains("MANKIND")) {
-          if (!value.contains("MANKIND-M")) {
-            divi.add(value);
-          }
+          //    if (!value.contains("MANKIND-M")) {
+          divi.add(value);
+          //  }
         }
         ;
       });
-      divi = [
-        "MANKIND (GRAVITOS)",
-        "MANKIND-CEREBRIS",
-        "MANKIND-ZESTEVA",
-        "MANKIND-CURIS",
-        "MANKIND-DISCOVERY",
-        "MANKIND-FUTURE",
-        "MANKIND-MAIN",
-        "MANKIND-MAGNET",
-        "MANKIND-NOBLIS",
-        "MANKIND-SPECIAL"
-      ];
-    }
-    ;
+      // divi = [
+      //   "MANKIND (GRAVITOS)",
+      //   "MANKIND-CEREBRIS",
+      //   "MANKIND-ZESTEVA",
+      //   "MANKIND-CURIS",
+      //   "MANKIND-DISCOVERY",
+      //   "MANKIND-FUTURE",
+      //   "MANKIND-MAIN",
+      //   "MANKIND-M",
+      //   "MANKIND-MAGNET",
+      //   "MANKIND-NOBLIS",
+      //   "MANKIND-SPECIAL"
+      // ];
+    };
+
     if (comp.contains("ARISTO")) {
       company = "ARISTO";
       _companies.forEach((value) {
@@ -606,7 +602,7 @@ class _PartyReportState extends State<PartyReport> {
                               font: pw.Font.times(),
                               fontWeight: pw.FontWeight.normal,
                               fontSize: 8)),
-                      pw.Text("DL No:- UP4320B000615/UP4321B000615",
+                      pw.Text("DL No:- UP4320B000762/UP4321B000761",
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
                               font: pw.Font.times(),

@@ -41,7 +41,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   _displaySnackBar(String action) {
     final snackbar = SnackBar(content: Text(action));
-    _scaffoldKey1.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   final _scaffoldKey1 = GlobalKey<ScaffoldMessengerState>();

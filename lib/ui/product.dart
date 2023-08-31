@@ -13,6 +13,10 @@ import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:open_file/open_file.dart';
+import 'package:material_dialogs/material_dialogs.dart';
 
 bool progress;
 
@@ -47,7 +51,7 @@ class ProductPage extends StatefulWidget {
   final bool check;
   ProductPage({this.data, this.docID, this.check});
   String myEmail = "mpgonda1986@gmail.com";
-  String myPass = "Sanjay@123";
+  String myPass = "ubnhvfmoityjurhw";
   String subjectBody = " - MAHESH PHARMA GONDA";
   String emailBody = "ORDER IN STRIPS";
   String receiver = "";
@@ -64,7 +68,6 @@ class ProductPage extends StatefulWidget {
       String test0;
       division.forEach((k, v) => {
             test0 = '<h3>' + k + '</h3>',
-            print("------------------->>>" + k),
             i = 1,
             test1 = "",
             selectedProductList.forEach((t, s) => {
@@ -91,7 +94,6 @@ class ProductPage extends StatefulWidget {
                 test1 +
                 '</table>',
           });
-      print("------------>>going to return");
       return test;
     } else {
       String test1 = "";
@@ -162,14 +164,28 @@ class ProductPage extends StatefulWidget {
     }
   }
 
+  static void openFile(List<int> bytes, String name) async {
+    print("here2");
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/" + name + ".pdf");
+    print("here3");
+    await file.writeAsBytes(bytes);
+    print("here4");
+    OpenFile.open(file.path);
+    print("here5");
+  }
+
   @override
   _ProductPageState createState() => new _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
   _displaySnackBar(String action1) {
-    final snackbar = SnackBar(content: Text(action1));
-    _sKey.currentState.showSnackBar(snackbar);
+    if (action1 == "") {
+      action1 = "StatusUnknown";
+    }
+    final snackbar = new SnackBar(content: Text(action1));
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   void fillData(BuildContext context) {
@@ -214,7 +230,49 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-  void mailing() async {
+  pdfGenerator() async {
+    print("Insde pdf");
+    final doc = pw.Document();
+    List<List<String>> trial = List();
+    var element = (["S.No.", "Product", "Pack", "QTY"]);
+    int a = 0;
+
+    selectedProductList.forEach((k, v) {
+      trial.add([v.name, v.pack.toString(), v.qty.toString()]);
+      a++;
+    });
+    trial.sort((a, b) => a[0].compareTo(b[0]));
+    a = 1;
+    for (int i = 0; i < trial.length; i++) {
+      trial[i].insert(0, a.toString());
+      a++;
+    }
+    //trial.insert(0, element);
+    print(trial);
+    const tableHeaders = ["S.No.", "Product", "Pack", "QTY"];
+
+    doc.addPage(pw.MultiPage(
+        build: (pw.Context context) => [
+              pw.Table.fromTextArray(
+                context: context,
+                data: trial,
+                cellAlignment: pw.Alignment.topLeft,
+                headers: List<String>.generate(
+                  tableHeaders.length,
+                  (col) => tableHeaders[col],
+                ),
+              ),
+              pw.SizedBox(height: 20),
+            ]));
+    print("----> here1");
+    final pdfBytes = List.from(await doc.save());
+    final pdfIntBytes = pdfBytes.cast<int>();
+    if (pdfBytes.length > 0) {
+      ProductPage.openFile(pdfIntBytes, widget.data.name + widget.subjectBody);
+    }
+  }
+
+  Future<void> mailing() async {
     print("inside mailing");
     buildCC();
     final smtpServer = gmail(widget.myEmail, widget.myPass);
@@ -238,7 +296,10 @@ class _ProductPageState extends State<ProductPage> {
       });
       widget.sendDataToFirestore(true);
     } on MailerException catch (e) {
-      print('Message not sent.');
+      print('Message not sent. $e');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
       setState(() {
         action = "Opps!! Mail Sending Failed";
       });
@@ -350,6 +411,7 @@ class _ProductPageState extends State<ProductPage> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.normal,
+                color: Colors.black,
               ),
             ),
             onPressed: () {
@@ -395,6 +457,28 @@ class _ProductPageState extends State<ProductPage> {
   ScrollController _scroll = new ScrollController();
 
   final _sKey = GlobalKey<ScaffoldMessengerState>();
+  Widget _showBackButtonWarningDialog() {
+    return AlertDialog(
+      // contentPadding: EdgeInsets.all(0.0),
+      title: new Text("Alert!!"),
+      content: new Text(
+          "You have some items in your cart. Do you want to stay on the page or discard the changes?"),
+      actions: [
+        TextButton(
+          // FlatButton widget is used to make a text to work like a button
+          //textColor: Colors.black,
+          onPressed:
+              () {}, // function used to perform after pressing the button
+          child: Text('Discard'),
+        ),
+        TextButton(
+          //textColor: Colors.black,
+          onPressed: () {},
+          child: Text('Send Later'),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -408,7 +492,37 @@ class _ProductPageState extends State<ProductPage> {
                 leading: new IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
-                      Navigator.pop(context);
+                      return selectedProductList.length > 0
+                          ? showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  // contentPadding: EdgeInsets.all(0.0),
+                                  title: new Text("Alert!!"),
+                                  content: new Text(
+                                      "You have some items in your cart. Do you want to stay on the page or discard the changes?"),
+                                  actions: [
+                                    TextButton(
+                                      // FlatButton widget is used to make a text to work like a button
+                                      //textColor: Colors.black,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }, // function used to perform after pressing the button
+                                      child: Text('Go Back'),
+                                    ),
+                                    TextButton(
+                                      //textColor: Colors.black,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Stay'),
+                                    ),
+                                  ],
+                                );
+                              })
+                          : Navigator.pop(context);
+                      //
                     }),
                 title: new Text(
                   "Products",
@@ -419,8 +533,13 @@ class _ProductPageState extends State<ProductPage> {
                 ),
                 actions: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Icon(Icons.search),
+                    padding: const EdgeInsets.only(right: 2.0),
+                    child: IconButton(
+                      icon: Icon(Icons.download_rounded),
+                      onPressed: () {
+                        pdfGenerator();
+                      },
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 16.0),
@@ -1099,13 +1218,9 @@ class _ProductPageState extends State<ProductPage> {
                                                                 },
                                                               );
 
-                                                              mailing();
-                                                              new Future
-                                                                      .delayed(
-                                                                  new Duration(
-                                                                      seconds:
-                                                                          10),
-                                                                  () {
+                                                              mailing()
+                                                                  .whenComplete(
+                                                                      () {
                                                                 Navigator.pop(
                                                                     context);
                                                                 _displaySnackBar(
@@ -1113,12 +1228,8 @@ class _ProductPageState extends State<ProductPage> {
                                                               });
                                                             }
                                                           } on SocketException catch (_) {
-                                                            final snackbar = SnackBar(
-                                                                content: Text(
-                                                                    "Please check your internet connection"));
-                                                            _sKey.currentState
-                                                                .showSnackBar(
-                                                                    snackbar);
+                                                            _displaySnackBar(
+                                                                "Please check your internet connection");
                                                           }
                                                         },
                                                       ),

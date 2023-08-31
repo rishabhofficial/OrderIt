@@ -128,7 +128,7 @@ class AllProductPage extends StatefulWidget {
 class _AllProductPageState extends State<AllProductPage> {
   _displaySnackBar(String action1) {
     final snackbar = SnackBar(content: Text(action1));
-    _sKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   void fillData(BuildContext context) {
@@ -136,28 +136,30 @@ class _AllProductPageState extends State<AllProductPage> {
         .collection('Expiry')
         .doc(widget.docID)
         .collection(widget.data.name)
-        .snapshots()
-        .listen((cour) => cour.docs.forEach((doc) {
-              ProductData dataa = ProductData();
-              dataa.name = doc['prodName'];
-              dataa.pack = doc['prodPack'];
-              dataa.qty = doc['prodQty'];
-              dataa.division = doc['prodDivision'];
-              dataa.expiryDate = doc['prodExpiryDate'];
-              dataa.deal1 = doc['prodDeal1'];
-              dataa.deal2 = doc['prodDeal2'];
-              dataa.batchNumber = doc['prodBatchNumber'];
-              dataa.compCode = doc['compCode'];
-              dataa.mrp = doc['prodMrp'];
-              dataa.amount = doc['amount'];
-              Key1 k = new Key1();
-              k.name = doc['prodName'];
-              k.batch = doc['prodBatchNumber'];
-              testList.add(k);
-              batch[dataa.batchNumber] = dataa.name;
-              selectedProductList[k] = dataa;
-              setState(() {});
-            }));
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        ProductData dataa = ProductData();
+        dataa.name = doc['prodName'];
+        dataa.pack = doc['prodPack'];
+        dataa.qty = doc['prodQty'];
+        dataa.division = doc['prodDivision'];
+        dataa.expiryDate = doc['prodExpiryDate'];
+        dataa.deal1 = doc['prodDeal1'];
+        dataa.deal2 = doc['prodDeal2'];
+        dataa.batchNumber = doc['prodBatchNumber'];
+        dataa.compCode = doc['compCode'];
+        dataa.mrp = doc['prodMrp'];
+        dataa.amount = doc['amount'];
+        Key1 k = new Key1();
+        k.name = doc['prodName'];
+        k.batch = doc['prodBatchNumber'];
+        testList.add(k);
+        batch[dataa.batchNumber] = dataa.name;
+        selectedProductList[k] = dataa;
+        setState(() {});
+      });
+    });
   }
 
   String search = "";
@@ -265,7 +267,36 @@ class _AllProductPageState extends State<AllProductPage> {
                 leading: new IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
-                      Navigator.pop(context);
+                      return selectedProductList.length > 0
+                          ? showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  // contentPadding: EdgeInsets.all(0.0),
+                                  title: new Text("Alert!!"),
+                                  content: new Text(
+                                      "You have some items in your cart. Do you want to stay on the page or discard the changes?"),
+                                  actions: [
+                                    TextButton(
+                                      // FlatButton widget is used to make a text to work like a button
+                                      //textColor: Colors.black,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }, // function used to perform after pressing the button
+                                      child: Text('Go Back'),
+                                    ),
+                                    TextButton(
+                                      //textColor: Colors.black,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Stay'),
+                                    ),
+                                  ],
+                                );
+                              })
+                          : Navigator.pop(context);
                     }),
                 title: new Text(
                   "Products",
@@ -1673,7 +1704,7 @@ class _AllProductPageState extends State<AllProductPage> {
                                                                           color:
                                                                               Colors.black)),
                                                                   Text(
-                                                                      '\u20B9 ${selectedProductList[testList[index]].amount}',
+                                                                      '\u20B9 ${selectedProductList[testList[index]].amount.toStringAsFixed(1)}',
                                                                       style: TextStyle(
                                                                           color: Colors
                                                                               .black,
@@ -1731,9 +1762,7 @@ class _AllProductPageState extends State<AllProductPage> {
                       });
                     }
                   } on SocketException catch (_) {
-                    final snackbar = SnackBar(
-                        content: Text("Please check your internet connection"));
-                    _sKey.currentState.showSnackBar(snackbar);
+                    _displaySnackBar("Please check your internet connection");
                   }
                 },
                 child: Icon(Icons.mail),

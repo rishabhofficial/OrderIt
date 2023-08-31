@@ -154,7 +154,7 @@ class _LocalPartyReportState extends State<LocalPartyReport>
 
     final pdfBytes = List.from(await doc.save());
     if (pdfBytes.length > 0) {
-      LocalPartyReport.openFile(pdfBytes, widget.partyName);
+      LocalPartyReport.openFile(pdfBytes.cast<int>(), widget.partyName);
     }
   }
 

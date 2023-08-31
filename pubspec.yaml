@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.17.0
   loading_animations: ^2.2.0
   flutter_typeahead: ^4.0.0
+  material_dialogs: ^1.1.3
 
 
 

@@ -1,4 +1,4 @@
-#Fri Jun 03 23:08:36 IST 2022
+#Thu Mar 16 09:12:28 IST 2023
 base.2=/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes3.dex
 path.2=classes3.dex
 base.1=/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes2.dex

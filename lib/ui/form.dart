@@ -31,7 +31,7 @@ class _CompanyFormState extends State<CompanyForm> {
 
   _displaySnackBar(String action) {
     final snackbar = SnackBar(content: Text(action));
-    _scaffoldKey1.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   final _scaffoldKey1 = GlobalKey<ScaffoldMessengerState>();
@@ -215,7 +215,7 @@ class _CompanyUpdateFormState extends State<CompanyUpdateForm> {
 
   _displaySnackBar(String action) {
     final snackbar = SnackBar(content: Text(action));
-    _scaffoldKey2.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   final _scaffoldKey2 = GlobalKey<ScaffoldMessengerState>();
@@ -420,7 +420,7 @@ class _ProductFormState extends State<ProductForm> {
 
   _displaySnackBar(String action) {
     final snackbar = SnackBar(content: Text(action));
-    _scaffoldKey3.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   final _scaffoldKey3 = GlobalKey<ScaffoldMessengerState>();
@@ -572,6 +572,7 @@ class _ProductFormState extends State<ProductForm> {
                         .collection(widget.compName)
                         .add(addProd)
                         .whenComplete(() {
+                      print("---------->>>>>>" + addProd.toString());
                       _displaySnackBar("Successfully added to database");
                       FirebaseFirestore.instance
                           .collection("AllProducts")
@@ -673,7 +674,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
 
   _displaySnackBar(String action) {
     final snackbar = SnackBar(content: Text(action));
-    _scaffoldKey4.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   final _scaffoldKey4 = GlobalKey<ScaffoldMessengerState>();
@@ -984,7 +985,7 @@ class _PartyFormState extends State<PartyForm> {
 
   _displaySnackBar(String action) {
     final snackbar = SnackBar(content: Text(action));
-    _scaffoldKey1.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   final _scaffoldKey1 = GlobalKey<ScaffoldMessengerState>();
@@ -1132,7 +1133,7 @@ class _PartyUpdateFormState extends State<PartyUpdateForm> {
 
   _displaySnackBar(String action) {
     final snackbar = SnackBar(content: Text(action));
-    _scaffoldKey2.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   final _scaffoldKey2 = GlobalKey<ScaffoldMessengerState>();
