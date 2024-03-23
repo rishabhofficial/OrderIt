@@ -4,22 +4,22 @@ class CompanyData {
   String cc;
   String mailingName;
   String mailingLocation;
-  CompanyData({this.name, this.email, this.cc, this.mailingLocation,this.mailingName});
+  CompanyData(
+      {this.name, this.email, this.cc, this.mailingLocation, this.mailingName});
 
   // void disp() {
   //   name = "";
   //   email = "";
   //   cc = "";
   // }
-  toJson(){
-    return{
-      "compName":name,
-      "compEmail":email,
+  toJson() {
+    return {
+      "compName": name,
+      "compEmail": email,
       "compCC": cc,
       "compMailingName": mailingName,
-      "compMailingLocation" : mailingLocation
-  };
-
+      "compMailingLocation": mailingLocation
+    };
   }
 }
 
@@ -30,18 +30,15 @@ class PartyData {
   double defaultDiscount;
   PartyData({this.name, this.dateTime, this.email, this.defaultDiscount});
 
-
-  toJson(){
-    return{
-      "partyName":name,
-      "partyEmail":email,
+  toJson() {
+    return {
+      "partyName": name,
+      "partyEmail": email,
       "partyDate": dateTime,
       "partyDefaultDiscount": defaultDiscount
-  };
-
+    };
   }
 }
-
 
 class ProductData {
   String name;
@@ -56,7 +53,17 @@ class ProductData {
   String batchNumber;
   double amount;
 
-  ProductData({this.name, this.pack, this.qty, this.division, this.expiryDate, this.deal1, this.deal2,this.mrp,this.batchNumber,this.compCode});
+  ProductData(
+      {this.name,
+      this.pack,
+      this.qty,
+      this.division,
+      this.expiryDate,
+      this.deal1,
+      this.deal2,
+      this.mrp,
+      this.batchNumber,
+      this.compCode});
 
   toJson() {
     return {
@@ -75,8 +82,6 @@ class ProductData {
   }
 }
 
-
-
 class ExpiryProductData {
   String name;
   String pack;
@@ -93,5 +98,18 @@ class ExpiryProductData {
   String colDocId;
   String docId;
 
-  ExpiryProductData({this.name, this.pack, this.qty, this.division, this.expiryDate, this.deal1, this.deal2,this.mrp,this.batchNumber,this.compCode, this.partyName, this.colDocId, this.docId});
+  ExpiryProductData(
+      {this.name,
+      this.pack,
+      this.qty,
+      this.division,
+      this.expiryDate,
+      this.deal1,
+      this.deal2,
+      this.mrp,
+      this.batchNumber,
+      this.compCode,
+      this.partyName,
+      this.colDocId,
+      this.docId});
 }
