@@ -2,15 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/model.dart';
-import './party.dart';
-import './sentProduct.dart';
-import './product.dart';
+
 import './company.dart';
+import './party.dart';
 import './partyReport.dart';
+import './product.dart';
 import './profile.dart';
-import 'dart:io';
+import './sentProduct.dart';
 
 class Home extends StatelessWidget {
+  Future<List<String>> populateComp() async {
+    List<String> _companies = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection("Company")
+        .orderBy('compName')
+        .get();
+
+    snapshot.docs.forEach((element) {
+      if (!_companies.contains(element.data()['compName'])) {
+        _companies.add(element.data()['compName']);
+      }
+    });
+
+    return _companies;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

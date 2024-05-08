@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-de/values-de.xml",
+            "outputFile": "/Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-de/values-de.xml",
             "map": [
                 {
                     "source": "/Users/rishabhagarwal/.gradle/caches/transforms-2/files-2.1/3d3b845156c0c198eb16414fcc80a8d8/core-1.6.0/res/values-de/values-de.xml",

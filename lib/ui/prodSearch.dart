@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:startup_namer/model.dart';
+
 import './allProduct.dart';
 
 class DocumentID {
@@ -27,70 +26,61 @@ class _ProdSearchState extends State<ProdSearch> {
   @override
   void initState() {
     testList.clear();
-    print("1");
     fillData(widget.prodName)
         .whenComplete(() => {dataFound = (testList.length > 0) ? true : false});
     super.initState();
   }
 
-  Map<String, double> m = Map();
-
-  discountList() {
-    FirebaseFirestore.instance
-        .collection("Party")
-        .snapshots()
-        .listen((event) => event.docs.forEach((element) {
-              m[element['partyName']] = element['partyDefaultDiscount'];
-            }));
-  }
+  Map<String, double> partyDiscountMap = Map();
 
   Future<void> fillData(String prodName) async {
-    print("1");
-    //Map<DocumentID,ProductData> prodList = Map();
-    FirebaseFirestore.instance.collection('Expiry').get().then((querySnapshot) {
-      querySnapshot.docs.forEach((element) {
-        FirebaseFirestore.instance
-            .collection('Expiry')
-            .doc(element.id)
-            .collection(element['partyName'])
-            .where('prodName', isEqualTo: prodName)
-            .get()
-            .then((querySnapshot) {
-          querySnapshot.docs.forEach((doc) {
-            print("2");
-            DocumentID docu = DocumentID();
-            docu.docId1 = element.id;
-            docu.docId2 = doc.id;
-            docu.date = element['timestamp'];
-            docu.partyName = element['partyName'];
-            //docu.discount   = FirebaseFirestore.instance.collection("Party").where('partyName', isEqualTo: docu.partyName).getDocuments()
+    final expiryCollection = FirebaseFirestore.instance.collection('Expiry');
+    final QuerySnapshot expirySnapshot = await expiryCollection.get();
 
-            print("3");
-            ProductData prod = ProductData();
-            print("6");
-            prod.qty = int.parse(doc.data()['prodQty']).toString();
-            print("7");
-            prod.name = doc.data()['prodName'];
-            prod.pack = doc.data()['prodPack'];
-            print("8");
-            prod.mrp = doc.data()['prodMrp'];
-            prod.deal1 = doc.data()['prodDeal1'];
-            prod.deal2 = doc.data()['prodDeal2'];
-            prod.expiryDate = doc.data()['prodExpiryDate'];
-            prod.batchNumber = doc.data()['prodBatchNumber'];
-            print("9");
-            docu.amt = element['amount'];
-            print("5");
-            if (!testList.containsKey(docu)) {
-              print("4");
-              testList[docu] = prod;
-            }
-          });
-        });
-      });
-    });
-    // print(prodList);
-    //return testList;
+    final List<Future<void>> futures = [];
+
+    for (final element in expirySnapshot.docs) {
+      final partyName = element['partyName'];
+
+      final partyCollection =
+          expiryCollection.doc(element.id).collection(partyName);
+      final Future<QuerySnapshot> partySnapshotFuture =
+          partyCollection.where('prodName', isEqualTo: prodName).get();
+
+      futures.add(partySnapshotFuture.then((partySnapshot) async {
+        for (final doc in partySnapshot.docs) {
+          final Map<String, dynamic> elementData =
+              element.data() as Map<String, dynamic>;
+          final Map<String, dynamic> docData =
+              doc.data() as Map<String, dynamic>;
+
+          final docu = DocumentID()
+            ..docId1 = element.id
+            ..docId2 = doc.id
+            ..date = elementData['timestamp']
+            ..partyName = elementData['partyName'];
+
+          final prod = ProductData()
+            ..qty = int.parse(docData['prodQty']).toString()
+            ..name = docData['prodName']
+            ..pack = docData['prodPack']
+            ..mrp = docData['prodMrp']
+            ..deal1 = docData['prodDeal1']
+            ..deal2 = docData['prodDeal2']
+            ..expiryDate = docData['prodExpiryDate']
+            ..batchNumber = docData['prodBatchNumber'];
+
+          docu.amt = elementData['amount'];
+          if (!testList.containsKey(docu)) {
+            testList[docu] = prod;
+            setState(() {});
+            dataFound = true;
+          }
+        }
+      }));
+    }
+
+    await Future.wait(futures);
   }
 
   @override
@@ -125,7 +115,7 @@ class _ProdSearchState extends State<ProdSearch> {
                         child: CircularProgressIndicator(),
                       )
                     : Center(
-                        child: Icon(Icons.nat_outlined),
+                        child: Icon(Icons.hourglass_empty),
                       ))
                 : ListView.builder(
                     itemCount: testList.length,
@@ -161,7 +151,8 @@ class _ProdSearchState extends State<ProdSearch> {
                                             PartyData data = PartyData(
                                                 name: docu.partyName,
                                                 defaultDiscount:
-                                                    m[docu.partyName]);
+                                                    partyDiscountMap[
+                                                        docu.partyName]);
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -186,65 +177,73 @@ class _ProdSearchState extends State<ProdSearch> {
                                       ),
                                     ),
                                   ),
-                                  subtitle: Column(children: <Widget>[
-                                    Row(
+                                  subtitle: Wrap(
+                                      clipBehavior: Clip.hardEdge,
                                       children: <Widget>[
-                                        Text("Pack: ",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('${prod.pack}',
-                                            style:
-                                                TextStyle(color: Colors.black)),
-                                        SizedBox(width: 5),
-                                        Text("Expiry Date: ",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('${prod.expiryDate}',
-                                            style:
-                                                TextStyle(color: Colors.black)),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text("Batch No.: ",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('${prod.batchNumber}',
-                                            style:
-                                                TextStyle(color: Colors.black)),
-                                        SizedBox(width: 5),
-                                        Text("MRP: ",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('\u20B9 ${prod.mrp}',
-                                            style:
-                                                TextStyle(color: Colors.black)),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text("Qty: ",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('${prod.qty}',
-                                            style:
-                                                TextStyle(color: Colors.black)),
-                                        SizedBox(width: 5),
-                                        Text("Deal: ",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('${prod.deal1}+${prod.deal2}',
-                                            style:
-                                                TextStyle(color: Colors.black))
-                                      ],
-                                    ),
-                                  ]),
+                                        Row(
+                                          children: <Widget>[
+                                            Text("Pack: ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text('${prod.pack}',
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                            SizedBox(width: 5),
+                                            Text("Expiry Date: ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text('${prod.expiryDate}',
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text("Batch No.: ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text('${prod.batchNumber}',
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                            SizedBox(width: 5),
+                                            Text("MRP: ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text('\u20B9 ${prod.mrp}',
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text("Qty: ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text('${prod.qty}',
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                            SizedBox(width: 5),
+                                            Text("Deal: ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text('${prod.deal1}+${prod.deal2}',
+                                                style: TextStyle(
+                                                    color: Colors.black))
+                                          ],
+                                        ),
+                                      ]),
                                   trailing: Container(
                                       child: Padding(
                                           padding: EdgeInsets.all(8),

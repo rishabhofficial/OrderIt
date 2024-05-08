@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-uk/values-uk.xml",
+            "outputFile": "/Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-uk/values-uk.xml",
             "map": [
                 {
                     "source": "/Users/rishabhagarwal/.gradle/caches/transforms-2/files-2.1/b9e5900fc82125b336c2168b5fd854a8/play-services-basement-18.0.0/res/values-uk/values.xml",

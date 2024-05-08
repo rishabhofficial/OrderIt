@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:startup_namer/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:startup_namer/model.dart';
 
 class CompanyForm extends StatefulWidget {
   @override
@@ -486,10 +486,8 @@ class _ProductFormState extends State<ProductForm> {
                               vertical: 15, horizontal: 20),
                           labelText: "Division",
                           fillColor: Colors.white,
-                          enabled: (widget.compName == "ALKEM" ||
-                                  widget.compName == "ABT INDIA")
-                              ? true
-                              : false,
+                          enabled:
+                              (widget.compName == "ABT INDIA") ? true : false,
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(15.0),
                             borderSide: new BorderSide(),
@@ -532,8 +530,7 @@ class _ProductFormState extends State<ProductForm> {
                       },
                     ))
                 : Container(height: 0, width: 0),
-            (widget.isExpiryProd &&
-                    (_comp.text == "ALKEM" || _comp.text == "ABT INDIA"))
+            (widget.isExpiryProd && (_comp.text == "ABT INDIA"))
                 ? Padding(
                     padding: EdgeInsets.only(top: 30, left: 20, right: 20),
                     child: TextField(
@@ -646,7 +643,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
     populateComp();
   }
 
-  List<String> _companies = List();
+  List<String> _companies = [];
   String company;
   void populateComp() {
     _companies.clear();
@@ -663,7 +660,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
     //print(_companies);
   }
 
-  List comp = List();
+  List comp = [];
   FutureOr<Iterable<dynamic>> getSuggestions(String pattern) {
     comp.clear();
     _companies.forEach((element) {

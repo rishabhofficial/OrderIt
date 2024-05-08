@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:startup_namer/ui/partyReport.dart';
-import 'package:startup_namer/ui/splashScreen.dart';
-import './ui/splashScreen.dart';
-import './ui/home.dart';
 import 'package:firebase_core/firebase_core.dart';
-import './ui/partyReport.dart';
+import 'package:flutter/material.dart';
+import 'package:startup_namer/ui/splashScreen.dart';
+
+import './ui/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

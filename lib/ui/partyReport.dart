@@ -1,21 +1,24 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'dart:io';
 import 'package:startup_namer/model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:open_file/open_file.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:intl/intl.dart';
 
 int claim;
 
 String address = "";
 String location = "";
 String code = "";
-List<dynamic> divi = [];
-List<ExpiryProductData> partyWiseList = List();
+String loaderText = "Loading...";
+
+List<dynamic> compDivision = [];
+List<ExpiryProductData> partyWiseList = [];
 
 class PartyReport extends StatefulWidget {
   @override
@@ -24,18 +27,42 @@ class PartyReport extends StatefulWidget {
 
 class _PartyReportState extends State<PartyReport> {
   double mrpValue = 0.0;
+  List<String> _companies = [];
   @override
   void initState() {
-    print("Inside Init");
+    if (_companies.length <= 0) {
+      populateComp().then((value) {
+        setState(() {
+          _companies = value;
+        });
+      });
+    }
+
     setState(() {
       mrpValue = 0.0;
       batch.clear();
-      populateComp();
     });
     super.initState();
   }
 
-  List<String> batch = List();
+  Future<List<String>> populateComp() async {
+    List<String> compList = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection("Company")
+        .orderBy('compName')
+        .get();
+
+    snapshot.docs.forEach((element) {
+      if (!compList.contains(element.data()['compName'])) {
+        compList.add(element.data()['compName']);
+      }
+    });
+
+    return compList;
+  }
+
+  List<String> batch = [];
   static void openFile(List<int> bytes) async {
     final output = await getTemporaryDirectory();
     final file = File("${output.path}/" + code + ".pdf");
@@ -43,159 +70,112 @@ class _PartyReportState extends State<PartyReport> {
     OpenFile.open(file.path);
   }
 
-  Map<String, List<ProductData>> fillData(DateTime date) {
-    print("Inside FillData");
+  Future<Map<String, List<ProductData>>> fillData(DateTime date) async {
+    setState(() {
+      loaderText = "Collecting Data...";
+    });
+
     mrpValue = 0.0;
     batch.clear();
 
-    Map<String, List<ProductData>> m = Map();
+    Map<String, List<ProductData>> m = {};
 
-    String comp = company;
+    String comp = currentCompany;
     Timestamp timestamp2 = Timestamp.fromDate(timestamp1);
-    (comp == "MANKIND" || comp == "ARISTO")
-        ? FirebaseFirestore.instance
-            .collection('Expiry')
-            .where('timestamp', isGreaterThan: timestamp2)
-            .snapshots()
-            .listen((event) => event.docs.forEach((element) {
-                  FirebaseFirestore.instance
-                      .collection('Expiry')
-                      .doc(element.id)
-                      .collection(element['partyName'])
-                      .where('compCode', isGreaterThan: comp)
-                      .snapshots()
-                      .listen((cour) => cour.docs.forEach((doc) {
-                            print("Inside Firestore");
-                            ProductData prod = ProductData();
-                            ExpiryProductData product = ExpiryProductData();
-                            prod.qty =
-                                int.parse(doc.data()['prodQty']).toString();
-                            prod.name = doc.data()['prodName'];
-                            prod.pack = doc.data()['prodPack'];
-                            prod.mrp = doc.data()['prodMrp'];
-                            prod.expiryDate = doc.data()['prodExpiryDate'];
-                            prod.batchNumber = doc.data()['prodBatchNumber'];
-                            prod.compCode = doc.data()['compCode'];
-                            if (doc.data()['compCode'] == "MANKIND-M") {
-                              prod.compCode = "MANKIND-MAIN";
-                            }
 
-                            product.qty =
-                                int.parse(doc.data()['prodQty']).toString();
-                            product.name = doc.data()['prodName'];
-                            product.pack = doc.data()['prodPack'];
-                            product.mrp = doc.data()['prodMrp'];
-                            product.expiryDate = doc.data()['prodExpiryDate'];
-                            product.batchNumber = doc.data()['prodBatchNumber'];
-                            product.compCode = prod.compCode;
-                            product.partyName = element['partyName'];
-                            product.colDocId = element.id;
-                            product.docId = doc.id;
-                            partyWiseList.add(product);
-                            mrpValue += double.parse(prod.qty) * prod.mrp;
-                            bool test = false;
-                            if (m.containsKey(doc.data()['prodName'])) {
-                              for (int i = 0; i < m[prod.name].length; i++) {
-                                if (m[prod.name][i].batchNumber ==
-                                    prod.batchNumber) {
-                                  m[prod.name][i].qty =
-                                      (int.parse(m[prod.name][i].qty) +
-                                              int.parse(prod.qty))
-                                          .toString();
-                                  test = true;
-                                  break;
-                                }
-                              }
-                              if (test == false) {
-                                m[prod.name].add(prod);
-                              }
-                            } else {
-                              batch.add(prod.name);
-                              if (!m.containsKey(prod.name)) {
-                                m[prod.name] = [];
-                              }
-                              m[prod.name].add(prod);
-                            }
-                          }));
-                }))
-        : FirebaseFirestore.instance
+    QuerySnapshot expirySnapshot = await FirebaseFirestore.instance
+        .collection('Expiry')
+        .where('timestamp',
+            isGreaterThan: timestamp2) // Add timestamp condition here
+        .get();
+
+    for (DocumentSnapshot expiryDoc in expirySnapshot.docs) {
+      QuerySnapshot courSnapshot;
+
+      if (comp == "MANKIND" || comp == "ARISTO") {
+        courSnapshot = await FirebaseFirestore.instance
             .collection('Expiry')
-            .where('timestamp', isGreaterThan: timestamp2)
-            .snapshots()
-            .listen((event) => event.docs.forEach((element) {
-                  FirebaseFirestore.instance
-                      .collection('Expiry')
-                      .doc(element.id)
-                      .collection(element['partyName'])
-                      .where('compCode', isEqualTo: comp)
-                      .snapshots()
-                      .listen((cour) => cour.docs.forEach((doc) {
-                            print("Inside firestore2");
-                            ProductData prod = ProductData();
-                            ExpiryProductData product = ExpiryProductData();
-                            prod.qty =
-                                int.parse(doc.data()['prodQty']).toString();
-                            prod.name = doc.data()['prodName'];
-                            prod.pack = doc.data()['prodPack'];
-                            prod.mrp = doc.data()['prodMrp'];
-                            prod.expiryDate = doc.data()['prodExpiryDate'];
-                            prod.batchNumber = doc.data()['prodBatchNumber'];
-                            product.qty =
-                                int.parse(doc.data()['prodQty']).toString();
-                            product.name = doc.data()['prodName'];
-                            product.pack = doc.data()['prodPack'];
-                            product.mrp = doc.data()['prodMrp'];
-                            product.expiryDate = doc.data()['prodExpiryDate'];
-                            product.batchNumber = doc.data()['prodBatchNumber'];
-                            product.compCode = doc.data()['compCode'];
-                            product.partyName = element['partyName'];
-                            product.colDocId = element.id;
-                            product.docId = doc.id;
-                            partyWiseList.add(product);
-                            mrpValue += double.parse(prod.qty) * prod.mrp;
-                            bool test = false;
-                            if (m.containsKey(doc.data()['prodName'])) {
-                              for (int i = 0; i < m[prod.name].length; i++) {
-                                if (m[prod.name][i].batchNumber ==
-                                    prod.batchNumber) {
-                                  m[prod.name][i].qty =
-                                      (int.parse(m[prod.name][i].qty) +
-                                              int.parse(prod.qty))
-                                          .toString();
-                                  test = true;
-                                  break;
-                                }
-                              }
-                              if (test == false) {
-                                m[prod.name].add(prod);
-                              }
-                            } else {
-                              batch.add(prod.name);
-                              if (!m.containsKey(prod.name)) {
-                                m[prod.name] = [];
-                              }
-                              m[prod.name].add(prod);
-                            }
-                          }));
-                }));
+            .doc(expiryDoc.id)
+            .collection(expiryDoc['partyName'])
+            .where('compCode', isGreaterThan: comp)
+            .get();
+      } else {
+        courSnapshot = await FirebaseFirestore.instance
+            .collection('Expiry')
+            .doc(expiryDoc.id)
+            .collection(expiryDoc['partyName'])
+            .where('compCode', isEqualTo: comp)
+            .get();
+      }
+
+      for (DocumentSnapshot doc in courSnapshot.docs) {
+        ProductData prod = ProductData();
+        ExpiryProductData product = ExpiryProductData();
+        prod.qty = int.parse(doc['prodQty']).toString();
+        prod.name = doc['prodName'];
+        prod.pack = doc['prodPack'];
+        prod.mrp = doc['prodMrp'];
+        prod.expiryDate = doc['prodExpiryDate'];
+        prod.batchNumber = doc['prodBatchNumber'];
+        prod.compCode = doc['compCode'];
+        if (doc['compCode'] == "MANKIND-M") {
+          prod.compCode = "MANKIND-MAIN";
+        }
+
+        product.qty = int.parse(doc['prodQty']).toString();
+        product.name = doc['prodName'];
+        product.pack = doc['prodPack'];
+        product.mrp = doc['prodMrp'];
+        product.expiryDate = doc['prodExpiryDate'];
+        product.batchNumber = doc['prodBatchNumber'];
+        product.compCode = prod.compCode;
+        product.partyName = expiryDoc['partyName'];
+        product.colDocId = expiryDoc.id;
+        product.docId = doc.id;
+        partyWiseList.add(product);
+        mrpValue += double.parse(prod.qty) * prod.mrp;
+
+        bool test = false;
+        if (m.containsKey(doc['prodName'])) {
+          for (int i = 0; i < m[prod.name].length; i++) {
+            if (m[prod.name][i].batchNumber == prod.batchNumber) {
+              m[prod.name][i].qty =
+                  (int.parse(m[prod.name][i].qty) + int.parse(prod.qty))
+                      .toString();
+              test = true;
+              break;
+            }
+          }
+          if (!test) {
+            m[prod.name].add(prod);
+          }
+        } else {
+          batch.add(prod.name);
+          m[prod.name] = [prod];
+        }
+      }
+    }
     return m;
   }
 
   pdfGeneratorDivWise(dynamic m) async {
-    print("Indide Generate Pdf");
+    setState(() {
+      loaderText = "Generating Pdf...";
+    });
 
     final pw.Document doc = pw.Document();
-    //print(batch);
-    Map<String, List<List<String>>> trial = Map();
+
+    Map<String, double> divisionMRP = Map();
+    Map<String, List<List<String>>> divisionProductMap = Map();
 
     var element =
         (["S.No.", "Product", "Pack", "QTY", "MRP", "E/D", "Batch No."]);
 
     for (int i = 0; i < m.length; i++) {
       for (int j = 0; j < m[batch[i]].length; j++) {
-        if (trial.containsKey(m[batch[i]][j].compCode)) {
-          trial[m[batch[i]][j].compCode].add([
-            (trial[m[batch[i]][j].compCode].length + 1).toString(),
+        if (divisionProductMap.containsKey(m[batch[i]][j].compCode)) {
+          divisionProductMap[m[batch[i]][j].compCode].add([
+            (divisionProductMap[m[batch[i]][j].compCode].length + 1).toString(),
             m[batch[i]][j].name,
             m[batch[i]][j].pack,
             m[batch[i]][j].qty,
@@ -204,8 +184,8 @@ class _PartyReportState extends State<PartyReport> {
             m[batch[i]][j].batchNumber
           ]);
         } else {
-          trial[m[batch[i]][j].compCode] = [];
-          trial[m[batch[i]][j].compCode].add([
+          divisionProductMap[m[batch[i]][j].compCode] = [];
+          divisionProductMap[m[batch[i]][j].compCode].add([
             (1).toString(),
             m[batch[i]][j].name,
             m[batch[i]][j].pack,
@@ -217,36 +197,57 @@ class _PartyReportState extends State<PartyReport> {
         }
       }
     }
-    for (int x = 0; x < divi.length; x++) {
-      if (trial.containsKey(divi[x])) {
-        trial[divi[x]].insert(0, element);
-      }
 
-      //print(trial);
-    }
+    print(divisionProductMap);
+
+    // calculate mrpValue division wise using compDivision
+    compDivision.forEach((element) {
+      if (divisionProductMap.containsKey(element)) {
+        divisionMRP[element] = 0.0;
+        divisionProductMap[element].forEach((value) {
+          divisionMRP[element] +=
+              double.parse(value[3]) * double.parse(value[4]);
+        });
+      }
+    });
+
+    // for each key sort the list after removing the first element and after sorting insert the first elemet at the first place
+    divisionProductMap.forEach((key, value) {
+      value.sort((a, b) => a[1].compareTo(b[1]));
+      value.insert(0, element);
+    });
 
     doc.addPage(pw.MultiPage(
         header: _buildHeader,
         footer: _buildFooter,
         build: (pw.Context context) => [
               pw.Wrap(
-                  children: List.generate(divi.length, (index) {
-                return (trial.containsKey(divi[index]))
+                  children: List.generate(compDivision.length, (index) {
+                return (divisionProductMap.containsKey(compDivision[index]))
                     ? pw.Column(children: <pw.Widget>[
                         pw.Padding(
-                            child: pw.Text(divi[index]),
+                            child: pw.Text(compDivision[index]),
                             padding: pw.EdgeInsets.only(top: 12, bottom: 12)),
                         pw.Table.fromTextArray(
                             context: context,
-                            data: trial[divi[index]],
+                            data: divisionProductMap[compDivision[index]],
                             cellAlignment: pw.Alignment.topLeft),
+                        pw.Padding(
+                          padding: pw.EdgeInsets.only(top: 10, right: 20),
+                          child: pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                "Total MRP Value(Rupees): " +
+                                    divisionMRP[compDivision[index]]
+                                        .toStringAsFixed(2),
+                              ),
+                            ],
+                          ),
+                        ),
                       ])
                     : pw.Container(width: 0, height: 0);
               })),
-              pw.Padding(
-                  padding: pw.EdgeInsets.only(top: 10),
-                  child: pw.Text("Total MRP Value(Rupees): " +
-                      mrpValue.toStringAsFixed(2)))
             ]));
 
     final pdfBytes = List.from(await doc.save());
@@ -256,9 +257,13 @@ class _PartyReportState extends State<PartyReport> {
   }
 
   pdfGenerator(dynamic m) async {
+    setState(() {
+      loaderText = "Generating Pdf...";
+    });
+
     final doc = pw.Document();
     //print(batch);
-    List<List<String>> trial = List();
+    List<List<String>> trial = [];
 
     var element =
         (["S.No.", "Product", "Pack", "QTY", "MRP", "E/D", "Batch No."]);
@@ -283,7 +288,6 @@ class _PartyReportState extends State<PartyReport> {
       a++;
     }
     trial.insert(0, element);
-    //print(trial);
 
     doc.addPage(pw.MultiPage(
         header: _buildHeader,
@@ -305,84 +309,47 @@ class _PartyReportState extends State<PartyReport> {
     }
   }
 
-  void _populate_comp_details(String comp) {
-    divi.clear();
+  Future<void> _populateCompDetails(String comp) async {
+    compDivision.clear();
 
     if (comp.contains("MANKIND")) {
-      company = "MANKIND";
-
+      currentCompany = "MANKIND";
 
       _companies.forEach((value) {
         if (value.contains("MANKIND")) {
-          //    if (!value.contains("MANKIND-M")) {
-          divi.add(value);
-          //  }
+          compDivision.add(value);
         }
-        ;
       });
-      // divi = [
-      //   "MANKIND (GRAVITOS)",
-      //   "MANKIND-CEREBRIS",
-      //   "MANKIND-ZESTEVA",
-      //   "MANKIND-CURIS",
-      //   "MANKIND-DISCOVERY",
-      //   "MANKIND-FUTURE",
-      //   "MANKIND-MAIN",
-      //   "MANKIND-M",
-      //   "MANKIND-MAGNET",
-      //   "MANKIND-NOBLIS",
-      //   "MANKIND-SPECIAL"
-      // ];
-    };
+    }
 
     if (comp.contains("ARISTO")) {
-      company = "ARISTO";
+      currentCompany = "ARISTO";
       _companies.forEach((value) {
         if (value.contains("ARISTO")) {
-          divi.add(value);
+          compDivision.add(value);
         }
-        ;
       });
-      // divi = ["ARISTO-MF1","ARISTO-MF2","ARISTO-MF3","ARISTO-TF","ARISTO-GENETICA"];
     }
-    ;
-    FirebaseFirestore.instance
+
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("Company")
         .where('compName', isEqualTo: comp)
-        .snapshots()
-        .listen((event) {
-      event.docs.forEach((value) {
-        address = (value.data()['compMailingName'] == null)
-            ? ""
-            : value.data()['compMailingName'];
-        location = (value.data()['compMailingLocation'] == null)
-            ? ""
-            : value.data()['compMailingLocation'];
-        code =
-            (value.data()['compCode'] == null) ? "" : value.data()['compCode'];
-      });
-    });
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final DocumentSnapshot doc = snapshot.docs.first;
+      address = doc['compMailingName'] ?? "";
+      location = doc['compMailingLocation'] ?? "";
+      code = doc['compCode'] ?? "";
+    }
   }
 
-  List<String> _companies = List();
-  String company;
-  void populateComp() {
-    _companies.clear();
-    FirebaseFirestore.instance
-        .collection("Company")
-        .orderBy('compName')
-        .snapshots()
-        .listen((event) {
-      event.docs.forEach((element) {
-        if (!_companies.contains(element.data()['compName']))
-          _companies.add(element.data()['compName']);
-      });
-    });
-    //print(_companies);
-  }
+  String currentCompany = "ABT INDIA";
+  String visualValue = "ABT INDIA";
 
   final _sKey = GlobalKey<ScaffoldMessengerState>();
   DateTime timestamp1;
+  DateTime timestamp2 = DateTime.now();
   final format = DateFormat("yyyy-MM-dd");
   @override
   Widget build(BuildContext context) {
@@ -400,28 +367,12 @@ class _PartyReportState extends State<PartyReport> {
           style: TextStyle(
               color: Colors.white, fontSize: 22.0, fontWeight: FontWeight.w600),
         ),
-        actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: () {
-                    populateComp();
-                    setState(() {});
-                  })),
-        ],
-        //backgroundColor: Colors.blueAccent,
       ),
       body: Container(
         width: 500,
         decoration: BoxDecoration(color: Colors.grey[100]),
         child: new Column(
           children: <Widget>[
-            // Padding(
-            //   padding: EdgeInsets.only(top: 10),
-            //   child: Text("Enter Company Details", textAlign: TextAlign.center, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)
-            // ),
-
             Padding(
               padding: EdgeInsets.only(top: 60, left: 60, right: 60, bottom: 5),
               child: DropdownButton(
@@ -429,10 +380,11 @@ class _PartyReportState extends State<PartyReport> {
                 style: TextStyle(fontSize: 16, color: Colors.black),
                 icon: Icon(Icons.business),
                 hint: Text("Select Company"),
-                value: company,
+                value: visualValue,
                 onChanged: (newValue) {
                   setState(() {
-                    company = newValue;
+                    currentCompany = newValue;
+                    visualValue = newValue;
                   });
                 },
                 items: _companies.map((comp) {
@@ -472,15 +424,18 @@ class _PartyReportState extends State<PartyReport> {
                   format: format,
                   decoration: InputDecoration(
                     suffixIcon: Icon(Icons.calendar_today),
-                    labelText: "Ending Date",
+                    labelText: "Invoice Date",
                   ),
                   onShowPicker: (context, currentValue) {
                     return showDatePicker(
                         context: context,
                         firstDate: DateTime(2017),
-                        fieldLabelText: "Ending Date",
+                        fieldLabelText: "Invoice Date",
                         initialDate: currentValue ?? DateTime.now(),
                         lastDate: DateTime(2100));
+                  },
+                  onChanged: (newValue) {
+                    timestamp2 = newValue;
                   },
                 )),
             Padding(
@@ -519,7 +474,7 @@ class _PartyReportState extends State<PartyReport> {
                                         new Padding(
                                           padding: EdgeInsets.all(14),
                                           child: Text(
-                                            "Loading",
+                                            loaderText,
                                             style: TextStyle(fontSize: 16),
                                           ),
                                         )
@@ -530,12 +485,10 @@ class _PartyReportState extends State<PartyReport> {
                           );
                           print("Before populate Comp details");
                           //divi.clear();
-                          _populate_comp_details(company);
+                          _populateCompDetails(currentCompany);
                           print("After populate Comp details");
                           //print(company);
-                          var x = fillData(DateTime.now());
-                          //print("x=" + x.toString());
-                          new Future.delayed(new Duration(seconds: 5), () {
+                          fillData(DateTime.now()).then((x) {
                             Navigator.of(context).pop();
                             print("Inside Future" + x.length.toString());
                             if (x.length == 0) {
@@ -543,12 +496,10 @@ class _PartyReportState extends State<PartyReport> {
                                   SnackBar(content: Text("No Data Found"));
                               _sKey.currentState.showSnackBar(snackbar);
                             } else
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => CompExpiryReport()));
-                              print("x==================>>>>>>>>>>>>>" +
-                                  x.toString());
-                            (company == "MANKIND" || company == "ARISTO")
-                                ? pdfGeneratorDivWise(x)
-                                : pdfGenerator(x);
+                              (currentCompany == "MANKIND" ||
+                                      currentCompany == "ARISTO")
+                                  ? pdfGeneratorDivWise(x)
+                                  : pdfGenerator(x);
                           });
                         }
                       } on SocketException catch (_) {
@@ -624,11 +575,11 @@ class _PartyReportState extends State<PartyReport> {
                               fontSize: 10)),
                       pw.Text(
                           "DT - " +
-                              DateTime.now().day.toString() +
+                              timestamp2.day.toString() +
                               "/" +
-                              DateTime.now().month.toString() +
+                              timestamp2.month.toString() +
                               "/" +
-                              DateTime.now().year.toString(),
+                              timestamp2.year.toString(),
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
                               font: pw.Font.times(),
@@ -669,9 +620,6 @@ class _PartyReportState extends State<PartyReport> {
                                 font: pw.Font.times(),
                                 fontWeight: pw.FontWeight.normal,
                                 fontSize: 13))),
-                    //  pw.Padding(padding: pw.EdgeInsets.only(left:12),
-                    //   child: pw.Text("  DT - " + DateTime.now().day.toString() + "/" + DateTime.now().month.toString() + "/" + DateTime.now().year.toString(), textAlign: pw.TextAlign.right  ,style: pw.TextStyle(font: pw.Font.times(),fontWeight: pw.FontWeight.normal, fontSize: 10))
-                    // )
                   ]),
             ))
           ])),

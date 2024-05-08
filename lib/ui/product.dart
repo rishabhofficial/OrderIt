@@ -1,22 +1,23 @@
+import 'dart:io';
+
+import 'package:card_settings/card_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:excel/excel.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:startup_namer/model.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter/services.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:mailer/smtp_server/gmail.dart';
-import 'package:card_settings/card_settings.dart';
-import './form.dart';
-import 'dart:io';
-import 'package:excel/excel.dart';
-import 'package:flutter/services.dart' show ByteData, rootBundle;
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:open_file/open_file.dart';
-import 'package:material_dialogs/material_dialogs.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:startup_namer/model.dart';
+
+import './form.dart';
 
 bool progress;
 
@@ -41,6 +42,28 @@ class Order {
   }
 }
 
+class Product {
+  String prodName;
+  int prodMinQty;
+  int prodMaxQty;
+  int prodQty;
+  int week1Qty;
+  int week2Qty;
+  int week3Qty;
+  int week4Qty;
+
+  Product({
+    this.prodName,
+    this.prodMinQty,
+    this.prodMaxQty,
+    this.prodQty,
+    this.week1Qty,
+    this.week2Qty,
+    this.week3Qty,
+    this.week4Qty,
+  });
+}
+
 Map<String, ProductData> selectedProductList = new Map();
 List<String> testList = new List();
 String action;
@@ -59,7 +82,7 @@ class ProductPage extends StatefulWidget {
   String test = "";
 
   String buildStringDivisionWise() {
-    if (data.name == "ALKEM" || data.name == "ABT INDIA") {
+    if (data.name == "ABT INDIA") {
       String test1 = "";
       Map<String, bool> division = Map();
       selectedProductList.forEach((k, v) => {division[v.division] = true});
@@ -480,6 +503,125 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
+  int _parseMaxQty(Data input) {
+    if (input.value == "unlimited") {
+      return -1;
+    } else {
+      return _parseInteger(input);
+    }
+  }
+
+  int _parseInteger(dynamic value) {
+    if (value == null || value is! String) {
+      return 0; // Return a default value if the value is null or not a string
+    }
+
+    String input = value.toString();
+
+    try {
+      return int.parse(input);
+    } catch (e) {
+      // Handle parsing errors gracefully
+      print("Error parsing integer: $input");
+      return 0; // Default value or handle error as needed
+    }
+  }
+
+  List<Product> _sunProducts = [];
+  Future<void> pickAndProcessFile() async {
+    // Pick a file
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx', 'xls'],
+    );
+
+    if (result != null) {
+      String filePath = result.files.single.path;
+      String fileName = result.files.single.name;
+
+      // Check file extension
+      if (filePath != null && fileName != null) {
+        if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+          // It's an Excel file
+          // Process the Excel file
+          print("Processing Excel file: $filePath");
+          // Get the current month name
+          // String currentMonth = DateFormat('MMMM').format(DateTime.now());
+
+          // // Rename the file
+          // String newFileName = "SUN-$currentMonth.xlsx";
+          // Directory appDocumentsDirectory =
+          //     await getApplicationDocumentsDirectory();
+          // String newFilePath = '${appDocumentsDirectory.path}/$newFileName';
+          // await File(filePath).rename(newFilePath);
+
+          // print("File renamed to: $newFilePath");
+
+          var bytes = File(filePath).readAsBytesSync();
+          var excel = Excel.decodeBytes(bytes);
+
+          // Get the first sheet
+          var sheet = excel.tables.keys.first;
+          var table = excel.tables[sheet];
+
+          // Iterate through rows starting from the 5th row
+          for (var row in table.rows.skip(4)) {
+            String prodName = row[0].toString();
+            int prodMinQty = _parseInteger(row[17].toString());
+            int prodMaxQty = _parseMaxQty(row[19]);
+            int prodQty = _parseInteger(row[18].toString());
+            int week1Qty = _parseInteger(row[22].toString());
+            int week2Qty = _parseInteger(row[23].toString());
+            int week3Qty = _parseInteger(row[24].toString());
+            int week4Qty = _parseInteger(row[25].toString());
+            var item = Product(
+              prodName: prodName,
+              prodMinQty: prodMinQty,
+              prodMaxQty: prodMaxQty,
+              prodQty: prodQty,
+              week1Qty: week1Qty,
+              week2Qty: week2Qty,
+              week3Qty: week3Qty,
+              week4Qty: week4Qty,
+            );
+
+            print(item.prodQty);
+
+            _sunProducts.add(item);
+          }
+        } else {
+          // Unsupported file type
+          print("Unsupported file type: $fileName");
+          // Show error message to user
+          showErrorDialog("Unsupported file type: $fileName");
+        }
+      }
+    } else {
+      // User canceled the picker
+      print("User canceled file picker");
+    }
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -544,20 +686,36 @@ class _ProductPageState extends State<ProductPage> {
                   Padding(
                     padding: const EdgeInsets.only(right: 16.0),
                     child: PopupMenuButton(
-                        // initialValue: 1,
-                        onSelected: (int) {
+                      // initialValue: 1,
+                      onSelected: (int value) async {
+                        if (widget.data.name == "SUN-NEW") {
+                          await pickAndProcessFile();
+                        } else {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProductForm(widget.data.name, false)));
-                        },
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: 1,
-                                child: Text("Add New Product"),
-                              )
-                            ]),
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductForm(widget.data.name, false),
+                            ),
+                          );
+                        }
+                      },
+                      itemBuilder: (context) {
+                        String itemText = "Add New Product";
+
+                        // Conditionally change the text based on widget.data.name
+                        if (widget.data.name == "SUN-NEW") {
+                          itemText = "Upload Excel File"; // Change text here
+                        }
+
+                        return [
+                          PopupMenuItem(
+                            value: 1,
+                            child: Text(itemText),
+                          ),
+                        ];
+                      },
+                    ),
                   ),
                 ],
                 //backgroundColor: Colors.blueAccent,
@@ -641,8 +799,7 @@ class _ProductPageState extends State<ProductPage> {
                                   prod.name = rev[index]['prodName'];
                                   prod.pack = rev[index]['prodPack'];
                                   // if(prod.name.substring(0, search.length) == search){
-                                  if (widget.data.name == "ALKEM" ||
-                                      widget.data.name == "ABT INDIA") {
+                                  if (widget.data.name == "ABT INDIA") {
                                     prod.division = rev[index]['prodDivision'];
                                   } else {
                                     prod.division = null;
