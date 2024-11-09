@@ -108,7 +108,8 @@ class _ExpiryListState extends State<ExpiryList> {
                                   context: context,
                                   builder: (context) {
                                     TextEditingController _invoice =
-                                        TextEditingController();
+                                        TextEditingController(
+                                            text: prodList['invoiceNumber']);
                                     bool _validate = false;
                                     String invoice;
                                     return AlertDialog(

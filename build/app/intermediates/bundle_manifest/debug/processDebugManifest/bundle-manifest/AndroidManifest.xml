@@ -38,7 +38,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="OrderIt" >
+        android:label="orderit" >
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import './product.dart';
 import 'package:startup_namer/model.dart';
+
 import './form.dart';
+import './product.dart';
 
 List<String> compName = [];
 var check = new Map();

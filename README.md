@@ -1,4 +1,4 @@
-# OrderIt
+# orderit
 
 A new Flutter project.
 

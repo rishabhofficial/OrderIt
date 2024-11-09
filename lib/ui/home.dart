@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:startup_namer/model.dart';
 
 import './company.dart';
+import './letterheadList.dart';
 import './party.dart';
 import './partyReport.dart';
 import './product.dart';
@@ -194,6 +195,16 @@ class Home extends StatelessWidget {
             );
             final CupertinoActionSheet actionSheet = CupertinoActionSheet(
               actions: <Widget>[
+                CupertinoActionSheetAction(
+                  child: Text("Generate Letter", style: _actionSheetTextStyle),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LetterHeadPage()),
+                    );
+                  },
+                ),
                 CupertinoActionSheetAction(
                   child: Text("Generate Report", style: _actionSheetTextStyle),
                   onPressed: () {

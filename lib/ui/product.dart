@@ -74,7 +74,7 @@ class ProductPage extends StatefulWidget {
   final bool check;
   ProductPage({this.data, this.docID, this.check});
   String myEmail = "mpgonda1986@gmail.com";
-  String myPass = "ubnhvfmoityjurhw";
+  String myPass = "wxmtzbjptnkulski";
   String subjectBody = " - MAHESH PHARMA GONDA";
   String emailBody = "ORDER IN STRIPS";
   String receiver = "";
