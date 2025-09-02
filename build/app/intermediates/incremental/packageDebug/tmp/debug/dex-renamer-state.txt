@@ -1,9 +1,9 @@
-#Fri Nov 01 20:56:42 IST 2024
-base.2=/Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes3.dex
+#Wed Sep 03 03:00:10 IST 2025
+base.2=/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes3.dex
 path.2=classes3.dex
-base.1=/Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes2.dex
+base.1=/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes2.dex
 path.1=classes2.dex
-base.0=/Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+base.0=/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex

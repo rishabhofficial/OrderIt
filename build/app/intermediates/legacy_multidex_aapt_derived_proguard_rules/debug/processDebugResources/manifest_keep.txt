@@ -1,4 +1,4 @@
-# Referenced at /Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/merged_manifests/debug/AndroidManifest.xml:36
+# Referenced at /Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/merged_manifests/debug/AndroidManifest.xml:49
 -keep class androidx.core.app.CoreComponentFactory { <init>(); }
-# Referenced at /Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/merged_manifests/debug/AndroidManifest.xml:36
+# Referenced at /Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/merged_manifests/debug/AndroidManifest.xml:49
 -keep class androidx.multidex.MultiDexApplication { <init>(); }

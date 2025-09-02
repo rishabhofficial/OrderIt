@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:startup_namer/globals.dart';
 import 'package:startup_namer/model.dart';
 
 import './allProduct.dart';
@@ -148,11 +149,24 @@ class _ProdSearchState extends State<ProdSearch> {
                                           icon: Icon(Icons.edit),
                                           iconSize: 25,
                                           onPressed: () {
+                                            // Find the party code from global party list
+                                            GlobalPartyData partyData =
+                                                globalPartyList.firstWhere(
+                                              (party) =>
+                                                  party.partyName ==
+                                                  docu.partyName,
+                                              orElse: () => GlobalPartyData(
+                                                partyName: docu.partyName,
+                                                partyCode: '?',
+                                                partyLocation: 'Unknown',
+                                              ),
+                                            );
                                             PartyData data = PartyData(
                                                 name: docu.partyName,
                                                 defaultDiscount:
                                                     partyDiscountMap[
-                                                        docu.partyName]);
+                                                        docu.partyName],
+                                                partyCode: partyData.partyCode);
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

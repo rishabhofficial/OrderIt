@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:startup_namer/model.dart';
+import 'package:startup_namer/globals.dart';
+import 'package:startup_namer/utils/firebase_storage_service.dart';
 
-import './company.dart';
+import './expiryMenu.dart';
+import './inventoryMenu.dart';
 import './letterheadList.dart';
 import './party.dart';
-import './partyReport.dart';
-import './product.dart';
-import './profile.dart';
-import './sentProduct.dart';
 
 class Home extends StatelessWidget {
   Future<List<String>> populateComp() async {
@@ -29,229 +27,397 @@ class Home extends StatelessWidget {
     return _companies;
   }
 
+  void _showDataManagementDialog(BuildContext context) {
+    bool isDownloading = false;
+    double progress = 0.0;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("Data Management"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Download the latest CSV data files from Firebase Storage to update your local data.",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 20),
+                  if (isDownloading) ...[
+                    Text(
+                      "Downloading files...",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(height: 12),
+                    LinearProgressIndicator(
+                      value: progress,
+                      backgroundColor: Colors.grey[300],
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "${(progress * 100).toInt()}%",
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: isDownloading
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Icon(Icons.cloud_download),
+                      label: Text(
+                        isDownloading ? "Downloading..." : "Upgrade Data",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        onPrimary: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: isDownloading
+                          ? null
+                          : () async {
+                              setState(() {
+                                isDownloading = true;
+                                progress = 0.0;
+                              });
+
+                              try {
+                                // Use real progress updates from Firebase Storage
+                                bool success = await FirebaseStorageService
+                                    .downloadAllCSVFilesWithProgress(
+                                        (double progressValue) {
+                                  setState(() {
+                                    progress = progressValue;
+                                  });
+                                });
+
+                                // Load all CSV data in parallel after downloading
+                                bool dataLoaded = await loadAllCSVData();
+
+                                if (success && dataLoaded) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            "Data files downloaded successfully!")),
+                                  );
+                                  Navigator.of(context).pop();
+                                } else if (!success) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            "Some files failed to download. Please try again.")),
+                                  );
+                                } else if (!dataLoaded) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            "Files downloaded but failed to load data. Please try again.")),
+                                  );
+                                }
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text("Error downloading files: $e")),
+                                );
+                              } finally {
+                                setState(() {
+                                  isDownloading = false;
+                                  progress = 0.0;
+                                });
+                              }
+                            },
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Close"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-      bottomNavigationBar: new BottomAppBar(
-        color: Color.fromRGBO(58, 66, 86, 1.0),
-        shape: CircularNotchedRectangle(),
-        child: new Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.sort),
-              color: Colors.white,
-              onPressed: () {
-                // Directory appDocDirectory = await getApplicationDocumentsDirectory();
-                // bool check = await File(appDocDirectory.path + "/" + "mankind.xlsx").exists();
-                // print("Check iss ===============>>>>>" + check.toString());
-                // Test test = new Test();
-                // test.sptest;
-              },
+      backgroundColor: Color(0xFF2C3E50),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF2C3E50),
+              Color(0xFF34495E),
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            // Custom Header
+            Container(
+              padding: EdgeInsets.only(top: 50, bottom: 20),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 20,
+                          offset: Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Image.asset(
+                      "asset/mp.webp",
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Mahesh Pharma",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.2,
+                      fontFamily: 'Roboto',
+                      shadows: [
+                        Shadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "Pharmaceutical Management System",
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.5,
+                      fontFamily: 'Roboto',
+                    ),
+                  ),
+                ],
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.person),
-              color: Colors.white,
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfileForm()));
-              },
+            // Content List
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(16.0),
+                children: [
+                  // Order Console Card
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.shopping_cart,
+                    iconColor: Color(0xFF9B59B6),
+                    title: 'Inventory Management',
+                    subtitle: 'Create and manage inventory',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InventoryMenu()),
+                      );
+                    },
+                  ),
+
+                  // Expiry Console Card
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.warning,
+                    iconColor: Color(0xFFF39C12),
+                    title: 'Expiry Management',
+                    subtitle: 'Manage Expired Goods',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PartyPage()),
+                      );
+                    },
+                  ),
+
+                  // Generate Report Card
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.assessment,
+                    iconColor: Color(0xFF27AE60),
+                    title: 'Reports Portal',
+                    subtitle: 'View and analyze reports',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ExpiryMenu()),
+                      );
+                    },
+                  ),
+
+                  // Generate Letter Card
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.description,
+                    iconColor: Color(0xFF3498DB),
+                    title: 'Letter Templates',
+                    subtitle: 'Create and manage letterheads',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LetterHeadPage()),
+                      );
+                    },
+                  ),
+
+                  // Data Management Card
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.cloud_download,
+                    iconColor: Color(0xFF1ABC9C),
+                    title: 'Sync & Manage',
+                    subtitle: 'Download and update data',
+                    onTap: () {
+                      _showDataManagementDialog(context);
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                elevation: 0.1,
-                backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-                expandedHeight: 230.0,
-                floating: true,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: Text("Order History",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22.0,
-                        )),
-                    background: Image.network(
-                      "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=350",
-                      fit: BoxFit.cover,
-                    )),
-              ),
-            ];
-          },
-          body: Container(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection("Orders")
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot prodList = snapshot.data.docs[index];
-                      return Column(children: <Widget>[
-                        Card(
-                          elevation: 100.0,
-                          shadowColor: Colors.black,
-                          margin: new EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 6.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Color.fromRGBO(64, 75, 96, .9)),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 10.0),
-                              leading: Container(
-                                padding: EdgeInsets.only(right: 12.0, top: 10),
-                                decoration: new BoxDecoration(
-                                    border: new Border(
-                                        right: new BorderSide(
-                                            width: 1.0,
-                                            color: Colors.white24))),
-                                child: prodList['isSent']
-                                    ? Icon(
-                                        Icons.check,
-                                        color: Colors.green,
-                                        size: 35,
-                                      )
-                                    : Icon(Icons.clear,
-                                        color: Colors.red, size: 35),
-                              ),
-                              title: Text(
-                                '${prodList['compName']}',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+    );
+  }
 
-                              subtitle: Row(
-                                children: <Widget>[
-                                  Icon(Icons.date_range,
-                                      color: Colors.yellow[200]),
-                                  Text('${prodList['date']}',
-                                      style: TextStyle(color: Colors.white))
-                                ],
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(Icons.keyboard_arrow_right,
-                                    color: Colors.white, size: 30.0),
-                                onPressed: () {
-                                  CompanyData data = CompanyData(
-                                      email: prodList['compEmail'],
-                                      name: prodList['compName']);
-                                  prodList['isSent']
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SentItemsPage(prodList.id,
-                                                      prodList['compName'])))
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ProductPage(
-                                                    data: data,
-                                                    docID: prodList.id,
-                                                    check: true,
-                                                  )));
-                                },
-                              ),
+  Widget _buildFeatureCard(
+    BuildContext context, {
+    IconData icon,
+    Color iconColor,
+    String title,
+    String subtitle,
+    VoidCallback onTap,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 8.0),
+      child: Card(
+        elevation: 6.0,
+        shadowColor: Colors.black26,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF34495E),
+                Color(0xFF2C3E50),
+              ],
+            ),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12.0),
+              onTap: onTap,
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: iconColor,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: iconColor.withOpacity(0.3),
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        icon,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              fontFamily: 'Roboto',
                             ),
                           ),
-                        )
-                      ]);
-                    },
-                  );
-                }
-              },
-            ),
-          )),
-      floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.black,
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          elevation: 2.0,
-          onPressed: () {
-            const TextStyle _actionSheetTextStyle = TextStyle(
-              color: Color.fromRGBO(34, 34, 34, 1.0),
-              fontSize: 16,
-            );
-            final CupertinoActionSheet actionSheet = CupertinoActionSheet(
-              actions: <Widget>[
-                CupertinoActionSheetAction(
-                  child: Text("Generate Letter", style: _actionSheetTextStyle),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LetterHeadPage()),
-                    );
-                  },
+                          SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            style: TextStyle(
+                              color: Colors.grey[300],
+                              fontSize: 13,
+                              fontFamily: 'Roboto',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey[300],
+                      size: 18,
+                    ),
+                  ],
                 ),
-                CupertinoActionSheetAction(
-                  child: Text("Generate Report", style: _actionSheetTextStyle),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PartyReport()),
-                    );
-                  },
-                ),
-                CupertinoActionSheetAction(
-                  child: Text("Expiry Console", style: _actionSheetTextStyle),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PartyPage()),
-                    );
-                  },
-                ),
-                CupertinoActionSheetAction(
-                  child: Text("Order Console", style: _actionSheetTextStyle),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CompanyPage()),
-                    );
-                  },
-                )
-              ],
-              cancelButton: CupertinoActionSheetAction(
-                child: Text(
-                  "Cancel",
-                  style: _actionSheetTextStyle,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
               ),
-            );
-            showCupertinoModalPopup<CupertinoActionSheet>(
-              context: context,
-              builder: (BuildContext context) => actionSheet,
-            );
-          }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -4,22 +4,33 @@ class CompanyData {
   String cc;
   String mailingName;
   String mailingLocation;
-  CompanyData({this.name, this.email, this.cc, this.mailingLocation,this.mailingName});
+  List<dynamic> codes;
+  String compCode;
+  CompanyData({
+    this.name,
+    this.email,
+    this.cc,
+    this.mailingLocation,
+    this.mailingName,
+    this.codes,
+    this.compCode,
+  });
 
   // void disp() {
   //   name = "";
   //   email = "";
   //   cc = "";
   // }
-  toJson(){
-    return{
-      "compName":name,
-      "compEmail":email,
+  toJson() {
+    return {
+      "compName": name,
+      "compEmail": email,
       "compCC": cc,
       "compMailingName": mailingName,
-      "compMailingLocation" : mailingLocation
-  };
-
+      "compMailingLocation": mailingLocation,
+      "codes": codes,
+      "compCode": compCode
+    };
   }
 }
 
@@ -28,39 +39,59 @@ class PartyData {
   DateTime dateTime;
   String email;
   double defaultDiscount;
-  PartyData({this.name, this.dateTime, this.email, this.defaultDiscount});
+  String partyCode;
+  PartyData({
+    this.name,
+    this.dateTime,
+    this.email,
+    this.defaultDiscount,
+    this.partyCode,
+  });
 
-
-  toJson(){
-    return{
-      "partyName":name,
-      "partyEmail":email,
+  toJson() {
+    return {
+      "partyName": name,
+      "partyEmail": email,
       "partyDate": dateTime,
-      "partyDefaultDiscount": defaultDiscount
-  };
-
+      "partyDefaultDiscount": defaultDiscount,
+      "partyCode": partyCode
+    };
   }
 }
 
-
 class ProductData {
+  String icode;
   String name;
   String pack;
   String qty;
   String compCode;
-  String division = null;
+  String division;
   String expiryDate;
-  int deal1 = 0;
-  int deal2 = 0;
+  int deal1;
+  int deal2;
   double mrp;
   String batchNumber;
   double amount;
 
-  ProductData({this.name, this.pack, this.qty, this.division, this.expiryDate, this.deal1, this.deal2,this.mrp,this.batchNumber,this.compCode});
+  ProductData({
+    this.icode,
+    this.name,
+    this.pack,
+    this.qty,
+    this.division,
+    this.expiryDate,
+    this.deal1,
+    this.deal2,
+    this.mrp,
+    this.batchNumber,
+    this.compCode,
+    this.amount,
+  });
 
   toJson() {
     return {
       "compCode": compCode,
+      "prodIcode": icode,
       "prodName": name,
       "prodPack": pack,
       "prodQty": qty,
@@ -75,17 +106,15 @@ class ProductData {
   }
 }
 
-
-
 class ExpiryProductData {
   String name;
   String pack;
   String qty;
   String compCode;
-  String division = null;
+  String division;
   String expiryDate;
-  int deal1 = 0;
-  int deal2 = 0;
+  int deal1;
+  int deal2;
   double mrp;
   String batchNumber;
   double amount;
@@ -93,5 +122,20 @@ class ExpiryProductData {
   String colDocId;
   String docId;
 
-  ExpiryProductData({this.name, this.pack, this.qty, this.division, this.expiryDate, this.deal1, this.deal2,this.mrp,this.batchNumber,this.compCode, this.partyName, this.colDocId, this.docId});
+  ExpiryProductData({
+    this.name,
+    this.pack,
+    this.qty,
+    this.division,
+    this.expiryDate,
+    this.deal1,
+    this.deal2,
+    this.mrp,
+    this.batchNumber,
+    this.compCode,
+    this.amount,
+    this.partyName,
+    this.colDocId,
+    this.docId,
+  });
 }

@@ -1,9 +1,7 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:startup_namer/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter/material.dart';
+import 'package:startup_namer/globals.dart';
+import 'package:startup_namer/utils/firebase_storage_service.dart';
 
 class Profile {
   String name;
@@ -26,10 +24,11 @@ class _ProfileFormState extends State<ProfileForm> {
   TextEditingController _email = TextEditingController();
   TextEditingController _pass = TextEditingController();
 
-  Profile prof = new Profile();
+  Profile prof = new Profile(name: '', email: '', password: '');
   bool test = true;
   bool _isHidden = true;
   String random = "";
+  bool _isDownloading = false;
 
   @override
   void initState() {
@@ -156,7 +155,105 @@ class _ProfileFormState extends State<ProfileForm> {
                   if (test == true) {
                     test = false;
                   }
-                })
+                }),
+
+            // Data Management Section
+            Padding(
+              padding: EdgeInsets.only(top: 40, left: 20, right: 20),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.0),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Data Management",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue[800],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Text(
+                        "Download the latest CSV data files from Firebase Storage to update your local data.",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          icon: _isDownloading
+                              ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
+                                )
+                              : Icon(Icons.cloud_download),
+                          label: Text(
+                            _isDownloading ? "Downloading..." : "Upgrade Data",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            onPrimary: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: _isDownloading
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    _isDownloading = true;
+                                  });
+
+                                  try {
+                                    bool success = await FirebaseStorageService
+                                        .downloadAllCSVFiles();
+
+                                    // Load all CSV data in parallel after downloading
+                                    bool dataLoaded = await loadAllCSVData();
+
+                                    if (success && dataLoaded) {
+                                      _displaySnackBar(
+                                          "Data files downloaded successfully!");
+                                    } else if (!success) {
+                                      _displaySnackBar(
+                                          "Some files failed to download. Please try again.");
+                                    } else if (!dataLoaded) {
+                                      _displaySnackBar(
+                                          "Files downloaded but failed to load data. Please try again.");
+                                    }
+                                  } catch (e) {
+                                    _displaySnackBar(
+                                        "Error downloading files: $e");
+                                  } finally {
+                                    setState(() {
+                                      _isDownloading = false;
+                                    });
+                                  }
+                                },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

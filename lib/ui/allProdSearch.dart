@@ -97,9 +97,20 @@ class _SearchProdListState extends State<SearchProdList> {
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
                       List rev = snapshot.data.docs.toList();
-                      ProductData prod = ProductData();
-                      prod.name = rev[index]['prodName'];
-                      prod.pack = rev[index]['prodPack'];
+                      ProductData prod = ProductData(
+                        icode: rev[index]['prodIcode'].toString(),
+                        name: rev[index]['prodName'].toString(),
+                        pack: rev[index]['prodPack'].toString(),
+                        qty: rev[index]['prodQty'].toString(),
+                        division: rev[index]['prodDivision'].toString(),
+                        expiryDate: rev[index]['prodExpiryDate'].toString(),
+                        deal1: int.parse(rev[index]['prodDeal1'].toString()),
+                        deal2: int.parse(rev[index]['prodDeal2'].toString()),
+                        mrp: double.parse(rev[index]['prodMrp'].toString()),
+                        batchNumber: rev[index]['prodBatchNumber'].toString(),
+                        compCode: rev[index]['compCode'].toString(),
+                        amount: double.parse(rev[index]['amount'].toString()),
+                      );
                       var color = Colors.blueGrey;
                       var elevation = 8.0;
                       return Column(

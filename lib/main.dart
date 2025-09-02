@@ -7,6 +7,7 @@ import './ui/home.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // CSV loading moved to splash screen for better UX
   runApp(MyApp());
 }
 

@@ -1,29 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rishabhagarwal/go/src/abc/OrderIt/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/Users/rishabhagarwal/go/src/OrderIt/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
-                    "source": "/Users/rishabhagarwal/.gradle/caches/transforms-2/files-2.1/31b0dd2d2cc56331c210d3be5dd3fb6d/jetified-window-1.0.0-beta04/res/values/values.xml",
-                    "from": {
-                        "startLines": "2,7,8,9,10,11,19,23,34,51",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,234,294,346,391,451,869,1066,1790,2904",
-                        "endLines": "6,7,8,9,10,18,22,33,50,58",
-                        "endColumns": "11,59,51,44,59,24,24,24,24,24",
-                        "endOffsets": "229,289,341,386,446,864,1061,1785,2899,3292"
-                    },
-                    "to": {
-                        "startLines": "4,9,10,11,88,163,171,444,455,472",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "226,405,465,517,5559,11709,12127,27112,27836,28950",
-                        "endLines": "8,9,10,11,88,170,174,454,471,479",
-                        "endColumns": "11,59,51,44,59,24,24,24,24,24",
-                        "endOffsets": "400,460,512,557,5614,12122,12319,27831,28945,29338"
-                    }
-                },
-                {
-                    "source": "/Users/rishabhagarwal/go/src/abc/OrderIt/build/app/generated/res/google-services/debug/values/values.xml",
+                    "source": "/Users/rishabhagarwal/go/src/OrderIt/build/app/generated/res/google-services/debug/values/values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -59,22 +40,22 @@
                     }
                 },
                 {
-                    "source": "/Users/rishabhagarwal/go/src/abc/OrderIt/android/app/src/main/res/values/styles.xml",
+                    "source": "/Users/rishabhagarwal/.gradle/caches/transforms-2/files-2.1/386bb52b1201e898fbd17cad919edb6e/jetified-window-1.0.0-beta04/res/values/values.xml",
                     "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "6",
-                        "endColumns": "12",
-                        "endOffsets": "347"
+                        "startLines": "2,7,8,9,10,11,19,23,34,51",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,234,294,346,391,451,869,1066,1790,2904",
+                        "endLines": "6,7,8,9,10,18,22,33,50,58",
+                        "endColumns": "11,59,51,44,59,24,24,24,24,24",
+                        "endOffsets": "229,289,341,386,446,864,1061,1785,2899,3292"
                     },
                     "to": {
-                        "startLines": "137",
-                        "startColumns": "4",
-                        "startOffsets": "9988",
-                        "endLines": "141",
-                        "endColumns": "12",
-                        "endOffsets": "10280"
+                        "startLines": "4,9,10,11,88,163,171,444,455,472",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "226,405,465,517,5559,11709,12127,27112,27836,28950",
+                        "endLines": "8,9,10,11,88,170,174,454,471,479",
+                        "endColumns": "11,59,51,44,59,24,24,24,24,24",
+                        "endOffsets": "400,460,512,557,5614,12122,12319,27831,28945,29338"
                     }
                 },
                 {
@@ -109,6 +90,25 @@
                         "startOffsets": "6608,7786",
                         "endColumns": "67,166",
                         "endOffsets": "6671,7948"
+                    }
+                },
+                {
+                    "source": "/Users/rishabhagarwal/go/src/OrderIt/android/app/src/main/res/values/styles.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "12",
+                        "endOffsets": "347"
+                    },
+                    "to": {
+                        "startLines": "137",
+                        "startColumns": "4",
+                        "startOffsets": "9988",
+                        "endLines": "141",
+                        "endColumns": "12",
+                        "endOffsets": "10280"
                     }
                 },
                 {
